@@ -1,8 +1,6 @@
 ---
 name: production-grade
 description: Orchestrates a fully autonomous production pipeline from idea to deployed system. Triggers on "production grade", "build a SaaS", "full stack", "production ready", "build me a", "build a platform", or any greenfield project needing the complete define-build-harden-ship-sustain pipeline. The user sits at the CEO/CTO seat — this skill handles everything else.
-context: fork
-agent: general-purpose
 hooks:
   - event: UserPromptSubmit
     pattern: "production.grade|build.a.saas|full.stack|production.ready|build.me|build.a.platform"
