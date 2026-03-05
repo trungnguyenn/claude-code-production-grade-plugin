@@ -1,29 +1,14 @@
 ---
 name: polymath
 description: >
-  PRIORITY: When user expresses uncertainty ("don't know where to start",
-  "not sure", "no idea", "first time") alongside a build request, use polymath
-  INSTEAD of product-manager or production-grade. Uncertainty signals override
-  build triggers. Use when the user needs a thinking partner — exploring ideas,
-  researching domains, understanding codebases, comparing options, or making
-  decisions. Triggers on "help me think", "research", "explore", "explain this",
-  "what are my options", "I don't understand", "onboard me", "what should I",
-  "don't know where to start", "no idea how", "never built", "new to this",
-  uncertainty signals, comparison requests, or any intellectual work where
-  understanding must precede action. Also invoked by the production-grade
-  orchestrator as a pre-flight consultant when build commands show knowledge gaps.
-hooks:
-  - event: UserPromptSubmit
-    pattern: >-
-      help.me.think|research.this|explore|explain.this|what.are.my.options|
-      don.t.understand|onboard.me|what.should|compare|walk.me.through|
-      how.does.this|i.m.not.sure|what.if.we|should.i|i.m.stuck|
-      help.me.understand|brainstorm|pros.and.cons|trade.?offs|
-      what.do.you.think|advise|guide.me|teach.me|catch.me.up|
-      don.t.know|where.to.start|no.idea|not.sure.what|not.sure.how|
-      how.do.i|how.should.i|is.it.possible|can.i.even|never.built|
-      first.time|new.to.this|unfamiliar|no.experience
-    action: "evaluate-activate-implement"
+  Use when the user lacks clarity, confidence, or knowledge to proceed.
+  The user may have an idea but doesn't know how to approach it, what
+  technology to use, what's realistic, or what they're missing. They
+  need a thinking partner before they need a builder. If the user
+  expresses ANY uncertainty, confusion, or need for exploration —
+  even alongside a build request — use polymath FIRST. Understanding
+  must precede action. Also invoked as a pre-flight consultant when
+  the production-grade orchestrator detects knowledge gaps.
 ---
 
 # Polymath

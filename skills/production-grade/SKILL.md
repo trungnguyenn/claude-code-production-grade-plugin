@@ -1,10 +1,13 @@
 ---
 name: production-grade
-description: Orchestrates a fully autonomous production pipeline from idea to deployed system. Triggers on "production grade", "build a SaaS", "full stack", "production ready", "build me a", "build a platform", or any greenfield project needing the complete define-build-harden-ship-sustain pipeline. The user sits at the CEO/CTO seat — this skill handles everything else.
-hooks:
-  - event: UserPromptSubmit
-    pattern: "production.grade|build.a.saas|full.stack|production.ready|build.me|build.a.platform"
-    action: "evaluate-activate-implement"
+description: >
+  Use when the user wants to BUILD a complete production-ready system
+  and has sufficient clarity about what they want. The user is ready
+  to commit to execution — they want the full autonomous pipeline
+  (define, build, harden, ship, sustain). If the user is still
+  uncertain or exploring, use polymath first — this skill assumes
+  the user is ready to go or will be guided through the pipeline's
+  own pre-flight check.
 ---
 
 # Production Grade
