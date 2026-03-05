@@ -35,7 +35,7 @@ When triggered, follow this EXACT sequence:
 
 1. **Print kickoff banner:**
 ```
-━━━ Production Grade Pipeline v3.0 ━━━━━━━━━━━━━━━━━━
+━━━ Production Grade Pipeline v3.1 ━━━━━━━━━━━━━━━━━━
 Project: [extracted from user's message]
 ⧖ Bootstrapping workspace...
 ```
@@ -63,15 +63,23 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
 
 5. **Detect existing workspace** — if `Claude-Production-Grade-Suite/.orchestrator/` has prior state, offer to resume or restart via AskUserQuestion.
 
-6. **Research the domain** — use WebSearch before asking the user anything.
+6. **Polymath pre-flight check:**
+   - If `Claude-Production-Grade-Suite/polymath/handoff/context-package.md` exists → read it, pass to PM as pre-loaded context. Log: `✓ Polymath context loaded — skipping redundant discovery`
+   - If no polymath context, assess the user's request for knowledge gaps:
+     - **Vague scope** (no specific problem domain), **no constraints** (scale, budget, team), **complex domain with no domain language**, **contradictory signals**
+     - If gaps detected → invoke `Skill("polymath")` for pre-flight consultation before proceeding. The polymath will research, clarify with the user, and write a context package when ready.
+     - If no gaps → proceed directly. Log: `✓ Request is clear — proceeding to PM`
+   - If user explicitly requests to skip polymath ("just build it", clear detailed spec) → proceed immediately.
 
-7. **Create team and task graph:**
+7. **Research the domain** — use WebSearch before asking the user anything (skip if polymath already researched).
+
+8. **Create team and task graph:**
 ```python
 TeamCreate(team_name="production-grade")
 ```
 Create all 13 tasks with dependencies (see Task Dependency Graph). Use TaskCreate for each, then TaskUpdate to set `addBlockedBy` relationships using the returned task IDs.
 
-8. **Begin Phase 1** — read `phases/define.md` and start immediately. Do NOT ask "should I proceed?"
+9. **Begin Phase 1** — read `phases/define.md` and start immediately. Do NOT ask "should I proceed?"
 
 **Key principle:** The user already told you what to build. Research, plan, start building. Only pause at the 3 approval gates.
 
@@ -84,6 +92,19 @@ Follow the shared UX Protocol at `Claude-Production-Grade-Suite/.protocols/ux-pr
 4. **Continuous execution** — work until next gate or completion
 5. **Real-time progress** — constant ⧖/✓ terminal updates
 6. **Autonomy** — sensible defaults, self-resolve, report decisions
+
+### Gate Companion — Polymath Integration
+
+When the user selects **"Chat about this"** at any gate, invoke the polymath in translate mode:
+
+```python
+Skill(skill="polymath")
+# Polymath reads the gate artifacts, explains in plain language,
+# answers the user's questions via structured options,
+# then re-presents the original gate options when the user is ready.
+```
+
+This ensures non-technical users can understand what they're approving without the orchestrator needing to be the translator.
 
 ### Strategic Gates (3 total)
 
@@ -245,7 +266,8 @@ When HARDEN skills find Critical/High issues:
 
 | Task | Reads From | Writes To (Project Root) | Writes To (Workspace) |
 |------|-----------|--------------------------|----------------------|
-| T1: PM | User input, web research | — | `product-manager/BRD/` |
+| Polymath | User dialogue, web research | — | `polymath/context/`, `polymath/handoff/` |
+| T1: PM | User input, polymath context, web research | — | `product-manager/BRD/` |
 | T2: Architect | `product-manager/BRD/` | `api/`, `schemas/`, `docs/architecture/` | `solution-architect/` |
 | T3a: Backend | `api/`, `schemas/`, `docs/architecture/` | `services/`, `libs/shared/` | `software-engineer/` |
 | T3b: Frontend | `api/`, `product-manager/BRD/` | `frontend/` | `frontend-engineer/` |
@@ -328,7 +350,7 @@ Every agent follows:
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
-║                 PRODUCTION GRADE v3.0 — COMPLETE             ║
+║                 PRODUCTION GRADE v3.1 — COMPLETE             ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  Project: <name>                                             ║
 ║                                                              ║

@@ -59,9 +59,25 @@ digraph pm_flow {
 }
 ```
 
+## Pre-Loaded Context (Polymath Integration)
+
+Before starting the CEO interview, check for polymath context:
+
+```bash
+cat Claude-Production-Grade-Suite/polymath/handoff/context-package.md 2>/dev/null
+```
+
+If a context package exists, read it first. It contains:
+- Domain research the polymath already conducted
+- Decisions the user already made during exploration
+- Constraints identified (scale, budget, team, compliance)
+- User preferences expressed
+
+**Reduce the CEO interview to cover ONLY gaps not addressed in the context package.** Do not re-ask what the polymath already established. If the context package is comprehensive (covers problem, users, constraints, and scope), you may need only 1-2 clarifying questions instead of 5.
+
 ## Phase 1: CEO Interview (Quick & Focused)
 
-Ask 3-5 sharp questions, one at a time. Cover:
+Ask 3-5 sharp questions, one at a time (fewer if polymath context covers some). Cover:
 
 1. **What problem are we solving?** — Who has this pain? How do they deal with it today?
 2. **What does success look like?** — How will we know this feature works?
