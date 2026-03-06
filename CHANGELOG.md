@@ -2,17 +2,32 @@
 
 All notable changes to the Production Grade Plugin.
 
+## [5.2.0] — 2026-03-07
+
+### Added
+- **Frontend "make it work, then make it beautiful" overhaul** — restructured from 5 to 6 phases. Phase 2 reduced to functional defaults (system fonts, neutral palette — move fast). NEW Phase 5 (Design & Polish) added after functional verification.
+- **4 visual style presets** — user selects Creative, Elegance, High Tech, or Corporate at the start of Phase 5. Each drives all design decisions: colors, typography, spacing, interaction richness, dark mode treatment.
+  - **Creative** — vibrant, bold gradients, expressive fonts, animated transitions, illustrated empty states
+  - **Elegance** — minimalist, Apple-inspired, restrained palette, thin font weights, whitespace-driven
+  - **High Tech** — terminal aesthetics, monospace accents, dark-mode-first, data-dense, grid-aligned
+  - **Corporate** — formal, conservative palette, standard layouts, no animations, enterprise-ready
+- **Design research phase** — Phase 5 uses WebSearch (freshness protocol) to research domain trends, competitive visual benchmarks, and style-specific inspiration before making any design decisions.
+- **Frontend functional completeness enforcement** — Phase 4b (Functional Verification Pass). Dead Element Rule: any button/link/form that renders but does nothing is a Critical bug. Navigation Graph Verification. Interaction Trace: top 5 user flows walked click-by-click. Cross-Agent Reconciliation after parallel page builds.
+
+### Changed
+- **Frontend Engineer** — 6 phases (was 5). Phase 2 is functional defaults. Phase 5 is design research + polish. Phase 6 (Testing) tests the final polished version.
+- **Code Reviewer** Phase 2 — new checks for dead interactive elements and navigation completeness.
+
 ## [5.1.0] — 2026-03-07
 
 ### Added
 - **Boundary safety protocol** — new shared protocol (`boundary-safety.md`) with 6 structural patterns that cause silent failures at system boundaries. Derived from real deployment bugs found during a production-grade pipeline run on PingBase.
 - **6 patterns enforced**: (1) framework abstractions break at boundaries — use platform primitives when crossing domains, (2) delegate to framework control flow — don't duplicate middleware logic in UI, (3) self-referencing config creates infinite loops, (4) global interceptors must be conditional, (5) test full user journeys across system boundaries, (6) identity must be consistent across integrated systems.
-- **Frontend functional completeness enforcement** — new Phase 4b (Functional Verification Pass) in the Frontend Engineer skill. Dead Element Rule: any button/link/form that renders but does nothing is a Critical bug. Navigation Graph Verification: logo links to home, every nav item resolves, cross-page-group links work. Interaction Trace: top 5 user flows walked through click-by-click. Cross-Agent Reconciliation: after parallel page agents complete, verify all cross-references resolve and shared layouts contain routes from ALL page groups.
 
 ### Changed
 - **All 14 skills** now load `boundary-safety.md` at startup.
-- **Frontend Engineer** — restructured from 5 to 6 phases with "make it work, then make it beautiful" philosophy. Phase 2 reduced to functional defaults (no design research yet). Phase 4b added (functional verification). NEW Phase 5 (Design & Polish) — domain research via WebSearch, color theory, typography selection, micro-interactions, visual hierarchy, dark mode polish. Phase 6 (Testing) now tests the final polished version. 7 new Common Mistakes entries.
-- **Code Reviewer** Phase 2 — new "Boundary Safety" review dimension (7 checks): framework abstraction misuse, duplicated control flow, self-referencing config, unconditional interceptors, identity consistency, dead interactive elements, navigation completeness.
+- **Frontend Engineer** — 7 new Common Mistakes entries for navigation misuse, auth flow duplication, callback misconfiguration, and unconditional interceptors.
+- **Code Reviewer** Phase 2 — new "Boundary Safety" review dimension (5 checks): framework abstraction misuse, duplicated control flow, self-referencing config, unconditional interceptors, identity consistency.
 - **QA Engineer** Phase 5 (E2E) — 2 new rules requiring cross-boundary journey testing and framework navigation correctness verification. 2 new Common Mistakes entries.
 - **Orchestrator** Common Mistakes table expanded with 4 boundary safety anti-patterns.
 - **Orchestrator** protocol table updated to include `boundary-safety.md`.

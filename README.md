@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/nagisanzenin/claude-code-production-grade-plugin"><img src="https://img.shields.io/github/stars/nagisanzenin/claude-code-production-grade-plugin?style=social" alt="GitHub stars"></a>
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License">
-  <img src="https://img.shields.io/badge/version-5.1.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-5.2.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/agents-14-green.svg" alt="14 agents">
   <img src="https://img.shields.io/badge/protocols-8-red.svg" alt="7 protocols">
   <img src="https://img.shields.io/badge/execution%20modes-10-purple.svg" alt="10 modes">
@@ -25,6 +25,8 @@
 ## Release Timeline
 
 ```
+2026-03-07  v5.2  ●━━━ Frontend overhaul — functional-first, design polish, 4 visual style presets
+                  │
 2026-03-07  v5.1  ●━━━ Boundary Safety — 6 patterns for system boundary bugs, from real deployment
                   │
 2026-03-06  v5.0  ●━━━ Verified & Resilient — receipt enforcement, re-anchoring, adversarial review
