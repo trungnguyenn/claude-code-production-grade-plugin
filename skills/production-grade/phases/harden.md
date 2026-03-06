@@ -10,6 +10,16 @@ Enforce these boundaries strictly:
 - **code-reviewer** is READ-ONLY — produces findings and patch files, does NOT modify source code
 - See `Claude-Production-Grade-Suite/.protocols/conflict-resolution.md` for full authority table
 
+## Re-Anchor
+
+Before creating HARDEN agent tasks, re-read key artifacts from disk:
+- `Claude-Production-Grade-Suite/solution-architect/system-design.md`
+- `docs/architecture/adr/*.md` (Glob to list)
+- Directory listing of `services/`, `frontend/`, `libs/shared/` (what BUILD actually produced)
+- `Claude-Production-Grade-Suite/.orchestrator/receipts/T3a-*.json`, `T3b-*.json` (BUILD receipts — what was built, metrics)
+
+Use this freshly-read data when writing agent task prompts below.
+
 ## PARALLEL #3 + #4: T5 + T6a + T6b
 
 All three start together:
@@ -26,7 +36,7 @@ Write tests to project root: tests/
 Write workspace artifacts to: Claude-Production-Grade-Suite/qa-engineer/
 Run integration, e2e, and performance tests.
 Distinguish test bugs (fix immediately) from implementation bugs (log as findings).
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T5-qa-engineer.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -43,7 +53,7 @@ Perform STRIDE threat modeling + OWASP Top 10 audit + dependency scan.
 Write findings to: Claude-Production-Grade-Suite/security-engineer/
 Auto-fix Critical/High issues with regression tests.
 Document Medium/Low for remediation plan.
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T6a-security-engineer.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -61,7 +71,8 @@ Read protocols from: Claude-Production-Grade-Suite/.protocols/
 Review: SOLID/DRY/KISS, performance, N+1 queries, resource leaks, test quality.
 Write findings to: Claude-Production-Grade-Suite/code-reviewer/
 READ-ONLY: produce findings only, do NOT modify source code.
-When complete, mark your task as completed.""",
+ADVERSARIAL STANCE: Your job is to find where this code breaks, not confirm it works. Assume every function has an edge case, every endpoint accepts bad input, every concurrent operation has a race condition. Hunt for the bugs the author can't see.
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T6b-code-reviewer.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -82,10 +93,11 @@ Print pipeline dashboard with HARDEN ● active on phase start. Then print wave 
 └─────────────────────────────────────────────────────┘
 ```
 
-## Post-HARDEN: Remediation Preparation
+## Post-HARDEN: Receipt Verification & Remediation Preparation
 
 After all HARDEN tasks complete:
-1. Collect all findings from T5, T6a, T6b workspace folders
+1. **Verify receipts:** Read `.orchestrator/receipts/T5-qa-engineer.json`, `T6a-security-engineer.json`, `T6b-code-reviewer.json`. Verify all listed artifacts exist on disk.
+2. Collect all findings from T5, T6a, T6b workspace folders
 2. Deduplicate by file:line — keep highest severity rating
 3. Filter Critical/High severity findings
 4. If any Critical/High exist → T8 (Remediation in SHIP phase) receives the findings list
@@ -116,4 +128,10 @@ After all HARDEN tasks complete:
 
 ## Handoff to SHIP
 
-Read `phases/ship.md` and begin SHIP phase.
+**Re-anchor:** Before transitioning, re-read from disk:
+- `Claude-Production-Grade-Suite/security-engineer/findings/` (what was found)
+- `Claude-Production-Grade-Suite/code-reviewer/findings/critical.md`, `high.md`
+- `Claude-Production-Grade-Suite/qa-engineer/` test results
+- All HARDEN receipts from `.orchestrator/receipts/`
+
+Read `phases/ship.md` and begin SHIP phase — use freshly-read findings data for remediation agent prompt.

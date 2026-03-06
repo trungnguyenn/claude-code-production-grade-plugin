@@ -38,6 +38,17 @@ On PARALLEL #6 completion:
 - **sre** owns SLO/SLI definitions, error budgets, runbooks, chaos engineering — does NOT provision infrastructure
 - See `Claude-Production-Grade-Suite/.protocols/conflict-resolution.md`
 
+## Re-Anchor
+
+Before creating SHIP agent tasks, re-read key artifacts from disk:
+- `Claude-Production-Grade-Suite/security-engineer/findings/` (findings for remediation)
+- `Claude-Production-Grade-Suite/code-reviewer/findings/critical.md`, `high.md`
+- `Claude-Production-Grade-Suite/solution-architect/system-design.md` (architecture for infra)
+- Directory listing of `services/`, `infrastructure/` (what exists)
+- All HARDEN receipts from `.orchestrator/receipts/`
+
+Use this freshly-read data when writing agent task prompts below.
+
 ## PARALLEL #5: T7 + T8
 
 ```python
@@ -55,7 +66,7 @@ Write workspace artifacts to: Claude-Production-Grade-Suite/devops/
 DO NOT define SLOs — add placeholder: "SLO thresholds defined by SRE."
 DO NOT write runbooks — SRE writes runbooks to docs/runbooks/.
 Validate: terraform validate, pipeline syntax lint.
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T7-devops.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -74,7 +85,7 @@ For each finding:
   4. Re-scan the affected code
 If findings persist after 2 fix-rescan cycles → document and escalate.
 Medium/Low findings: document but do not block.
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T8-remediation.json with task, agent, phase, status, artifacts (files modified), metrics (findings_fixed, findings_remaining), verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -95,7 +106,7 @@ Define SLIs/SLOs per service, error budgets, burn-rate alerts.
 Design chaos engineering scenarios and game-day playbook.
 Write runbooks to project root: docs/runbooks/
 Write workspace artifacts to: Claude-Production-Grade-Suite/sre/
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T9-sre.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -112,7 +123,7 @@ Read protocols from: Claude-Production-Grade-Suite/.protocols/
 Optimize: prompt engineering, token usage, semantic caching, fallback chains.
 Design: A/B testing infrastructure, experiment framework, data pipeline.
 Write workspace artifacts to: Claude-Production-Grade-Suite/data-scientist/
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T10-data-scientist.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -121,9 +132,16 @@ When complete, mark your task as completed.""",
 #   TaskUpdate(taskId=t10_id, status="completed")  # Skip
 ```
 
+## Receipt Verification Before Gate 3
+
+After T9 (and T10 if applicable) completes:
+1. **Verify all SHIP receipts:** Read `.orchestrator/receipts/T7-devops.json`, `T8-remediation.json`, `T9-sre.json`, `T10-data-scientist.json` (if applicable). Verify all listed artifacts exist.
+2. **Verify remediation chain:** For each Critical/High finding from HARDEN, check that a remediation receipt AND a verification receipt exist. If any Critical finding lacks verification, flag before Gate 3.
+3. **Aggregate metrics** from all receipts for Gate 3 display — use verified receipt data, not memory.
+
 ## Gate 3 — Production Readiness
 
-After T9 completes, present Gate 3 using the orchestrator's gate pattern.
+After verification, present Gate 3 using the orchestrator's gate pattern.
 
 On approval → read `phases/sustain.md` and begin SUSTAIN phase.
 On "Fix issues first" → create additional remediation tasks.

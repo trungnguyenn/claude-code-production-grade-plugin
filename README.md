@@ -6,7 +6,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/nagisanzenin/claude-code-production-grade-plugin?style=social)](https://github.com/nagisanzenin/claude-code-production-grade-plugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-4.4.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)]()
 [![Skills](https://img.shields.io/badge/skills-14-green.svg)]()
 [![Modes](https://img.shields.io/badge/modes-10-purple.svg)]()
 [![Parallel Points](https://img.shields.io/badge/parallel%20points-10+-orange.svg)]()
@@ -15,11 +15,13 @@
 
 Build a complete SaaS from scratch, add a feature to existing code, harden before launch, set up CI/CD, write tests, review code quality — the orchestrator routes to the right skills automatically.
 
-> **v4.4** — Freshness protocol. All 14 agents now detect volatile data (model IDs, package versions, pricing, CVEs, framework APIs) and WebSearch to verify before implementing. No more outdated `gpt-4-turbo`, wrong Docker tags, or stale SDK syntax.
+> **v5.0** — Verified & Resilient. Receipt-based gate enforcement (proof every gate ran), re-anchoring protocol (agents stay accurate across long runs), adversarial code review (finds bugs the author can't see).
 
 ### Release Timeline
 
 ```
+2026-03-06  v5.0  ●━━━ Verified & Resilient — receipt enforcement, re-anchoring, adversarial review
+                  │
 2026-03-06  v4.4  ●━━━ Freshness protocol — agents WebSearch to verify volatile data before implementing
                   │
 2026-03-06  v4.3  ●━━━ Visual identity, observability, pipeline dashboard, gate ceremonies

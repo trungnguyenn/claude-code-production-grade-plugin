@@ -2,6 +2,24 @@
 
 All notable changes to the Production Grade Plugin.
 
+## [5.0.0] — 2026-03-06
+
+### Added
+- **Receipt-based gate enforcement** — new shared protocol (`receipt-protocol.md`) requiring every agent to write a JSON receipt as proof of completion. Receipts list artifacts produced, concrete metrics, and verification summary. Orchestrator verifies receipts and artifact existence at every phase transition and before every gate. No receipt = task not complete.
+- **Receipt verification at all 3 gates** — Gate 1 verifies PM receipt, Gate 2 verifies Architect receipt, Gate 3 verifies ALL receipts including remediation chain (finding → fix → verification) for Critical/High issues.
+- **Remediation receipt chain** — Critical/High findings require three receipts: finding agent receipt, remediation receipt, and verification receipt from the original finder confirming the fix. All three must exist before Gate 3 opens.
+- **Re-anchoring protocol** — orchestrator re-reads key workspace artifacts FROM DISK at every phase transition (DEFINE→BUILD, BUILD→HARDEN, HARDEN→SHIP, SHIP→SUSTAIN). Prevents context drift in long pipeline runs where compressed memory degrades accuracy of specs, ADRs, and API contracts.
+- **Adversarial code review stance** — code-reviewer skill reframed from neutral observer to adversarial challenger. Assumes code is wrong until proven right. Scaled with engagement mode: Express (Critical-only hunt), Standard (Critical+High), Thorough (all severities with edge case analysis), Meticulous (hostile with reproducible break scenarios).
+- **Phase-specific adversarial framing** — each review phase (Architecture Conformance, Code Quality, Performance, Test Quality) has explicit adversarial framing directing the reviewer to assume violations exist.
+
+### Changed
+- **All 14 skills** now load `receipt-protocol.md` at startup.
+- **All 5 phase dispatchers** updated with receipt verification blocks, re-anchor blocks, and receipt-writing instructions in agent prompts.
+- **Orchestrator bootstrap** creates `.orchestrator/receipts/` directory.
+- **Gate ceremony templates** now read verified receipt data for metrics display instead of relying on agent memory.
+- **Non-Full-Build modes** write and verify receipts at mode completion.
+- **Common Mistakes table** expanded with receipt, re-anchoring, and adversarial review anti-patterns.
+
 ## [4.4.0] — 2026-03-06
 
 ### Added

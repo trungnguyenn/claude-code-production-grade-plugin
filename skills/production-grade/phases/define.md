@@ -41,12 +41,14 @@ The product-manager skill will:
 3. Write BRD to `Claude-Production-Grade-Suite/product-manager/BRD/`
 4. Outputs: `brd.md`, `research-notes.md`, `constraints.md`
 
-**On completion:**
+**On completion:** The product-manager writes a receipt to `.orchestrator/receipts/T1-product-manager.json`, then:
 ```python
 TaskUpdate(taskId=t1_id, status="completed")
 ```
 
 ### Gate 1 — BRD Approval
+
+**Before opening gate:** Read `Claude-Production-Grade-Suite/.orchestrator/receipts/T1-product-manager.json`. Verify all `artifacts` exist on disk. Use receipt `metrics` for gate display numbers.
 
 Present Gate 1 using the orchestrator's gate pattern. On approval, unblock T2.
 
@@ -68,21 +70,30 @@ The solution-architect skill will:
 5. Write deliverables to **project root**: `api/`, `schemas/`, `docs/architecture/`
 6. Write workspace artifacts to `Claude-Production-Grade-Suite/solution-architect/`
 
-**On completion:**
+**On completion:** The solution-architect writes a receipt to `.orchestrator/receipts/T2-solution-architect.json`, then:
 ```python
 TaskUpdate(taskId=t2_id, status="completed")
 ```
 
 ### Gate 2 — Architecture Approval
 
+**Before opening gate:** Read `Claude-Production-Grade-Suite/.orchestrator/receipts/T2-solution-architect.json`. Verify all `artifacts` exist on disk. Use receipt `metrics` for gate display numbers.
+
 Present Gate 2 using the orchestrator's gate pattern. On approval, proceed to BUILD phase.
 
 ## Handoff to BUILD
 
 After Gate 2 approval:
-1. Verify architecture outputs exist at project root (`api/`, `schemas/`, `docs/architecture/`)
-2. Log decisions to `Claude-Production-Grade-Suite/.orchestrator/decisions-log.md`
-3. Read `phases/build.md` and begin BUILD phase
+1. **Verify receipts:** Read `Claude-Production-Grade-Suite/.orchestrator/receipts/T1-product-manager.json` and `T2-solution-architect.json`. Verify all listed artifacts exist on disk.
+2. **Re-anchor:** Re-read from disk before transitioning:
+   - `Claude-Production-Grade-Suite/product-manager/BRD/brd.md`
+   - `Claude-Production-Grade-Suite/solution-architect/system-design.md`
+   - `docs/architecture/adr/*.md` (list files)
+   - `api/openapi/*.yaml` (list files)
+   - `.orchestrator/settings.md`
+3. Verify architecture outputs exist at project root (`api/`, `schemas/`, `docs/architecture/`)
+4. Log decisions to `Claude-Production-Grade-Suite/.orchestrator/decisions-log.md`
+5. Read `phases/build.md` and begin BUILD phase — use freshly-read artifacts when creating agent task prompts
 
 ## Failure Handling
 

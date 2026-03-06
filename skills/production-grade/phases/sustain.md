@@ -23,6 +23,13 @@ On PARALLEL #7 completion:
 
 After T13 completes, print the final summary template from the orchestrator.
 
+## Re-Anchor
+
+Before creating SUSTAIN agent tasks, re-read from disk:
+- All receipts from `.orchestrator/receipts/` (complete pipeline history for compound learning)
+- `infrastructure/` listing, `.github/workflows/` listing
+- `docs/architecture/` listing
+
 ## PARALLEL #7: T11 + T12
 
 ```python
@@ -38,7 +45,7 @@ Generate: API reference (from OpenAPI specs), developer guides, operational guid
 If features.documentation_site is true: scaffold Docusaurus site.
 Write docs to project root: docs/
 Write workspace artifacts to: Claude-Production-Grade-Suite/technical-writer/
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T11-technical-writer.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -53,7 +60,7 @@ Read protocols from: Claude-Production-Grade-Suite/.protocols/
 Generate 3-5 project-specific skills as SKILL.md files.
 Install skills to: .claude/skills/
 Write workspace artifacts to: Claude-Production-Grade-Suite/skill-maker/
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T12-skill-maker.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True

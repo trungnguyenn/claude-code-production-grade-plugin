@@ -23,6 +23,7 @@ description: >
 !`cat .production-grade.yaml 2>/dev/null || echo "No config file — defaults apply"`
 !`cat Claude-Production-Grade-Suite/.protocols/visual-identity.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat Claude-Production-Grade-Suite/.protocols/receipt-protocol.md 2>/dev/null || true`
 
 <IMPORTANT>
 This skill ENHANCES Claude Code's development capabilities. Without it, Claude Code produces code files. With it, Claude Code produces complete production-ready systems — architecture, tested code, security audit, CI/CD, and documentation.
@@ -124,7 +125,7 @@ For non-Full-Build modes, use the lightweight execution flows below. For Full Bu
 
 All modes share these behaviors:
 - Bootstrap workspace: `mkdir -p Claude-Production-Grade-Suite/.protocols/ Claude-Production-Grade-Suite/.orchestrator/`
-- Write shared protocols (same as Full Build step 3, including `visual-identity.md` and `freshness-protocol.md`)
+- Write shared protocols (same as Full Build step 3, including `visual-identity.md`, `freshness-protocol.md`, and `receipt-protocol.md`)
 - Read `.production-grade.yaml` for path overrides
 - Read existing workspace state if present
 - Engagement mode + parallelism: ask ONLY if mode involves 3+ skills. For 1-2 skill modes, use Standard engagement + Sequential execution (overhead of asking isn't worth it).
@@ -369,6 +370,7 @@ When mode is **Full Build**, follow this EXACT sequence:
 ```bash
 mkdir -p Claude-Production-Grade-Suite/.protocols/
 mkdir -p Claude-Production-Grade-Suite/.orchestrator/
+mkdir -p Claude-Production-Grade-Suite/.orchestrator/receipts/
 ```
 
 3. **Write shared protocols** to `Claude-Production-Grade-Suite/.protocols/`:
@@ -381,6 +383,7 @@ mkdir -p Claude-Production-Grade-Suite/.orchestrator/
 | `conflict-resolution.md` | Authority hierarchy, dedup by file:line (keep highest severity), HARDEN→BUILD feedback loops (2 cycle max) |
 | `visual-identity.md` | Visual design language: container hierarchy (Tier 1/2/3), icon vocabulary, progress patterns, gate ceremonies, wave announcements, completion summaries, timing |
 | `freshness-protocol.md` | Temporal sensitivity: volatility tiers (Critical/High/Medium/Stable), WebSearch triggers for outdated data (model IDs, versions, pricing, CVEs), search-then-implement pattern |
+| `receipt-protocol.md` | Verifiable gate enforcement: receipt schema (JSON), write-after-verify pattern, remediation chain (finding → fix → verification), orchestrator verification at phase transitions |
 
 Read these from the plugin's `skills/_shared/protocols/` directory and copy them. If plugin path is unavailable, write from the summaries above.
 
@@ -562,6 +565,9 @@ Print the pipeline dashboard (DEFINE ● active), then the gate ceremony:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+**Receipt verification before gate:**
+Read `Claude-Production-Grade-Suite/.orchestrator/receipts/T1-product-manager.json`. Verify all `artifacts` exist on disk. If receipt missing or artifacts missing, investigate before opening gate. Use receipt `metrics` for the numbers displayed above.
+
 Then ask:
 ```python
 AskUserQuestion(questions=[{
@@ -595,6 +601,9 @@ Print the pipeline dashboard (DEFINE ✓ complete), then the gate ceremony:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+**Receipt verification before gate:**
+Read `Claude-Production-Grade-Suite/.orchestrator/receipts/T2-solution-architect.json`. Verify all `artifacts` exist on disk (ADRs, API specs, system design). If receipt missing or artifacts missing, investigate before opening gate. Use receipt `metrics` for the numbers displayed above.
+
 Then ask:
 ```python
 AskUserQuestion(questions=[{
@@ -627,6 +636,13 @@ Print the pipeline dashboard (DEFINE ✓, BUILD ✓, HARDEN ✓, SHIP ✓ comple
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Receipt verification before gate:**
+Read ALL receipts from `Claude-Production-Grade-Suite/.orchestrator/receipts/`. For each:
+- Verify `artifacts` exist on disk
+- Extract `metrics` for the gate display
+- For Critical/High findings: verify the remediation chain is complete (finding receipt + remediation receipt + verification receipt)
+- If any receipt is missing, any artifact is missing, or any Critical finding lacks a verification receipt → flag to user before opening gate
 
 Then ask:
 ```python
@@ -993,6 +1009,23 @@ Every agent follows:
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
+## Re-Anchoring Protocol
+
+At every phase transition, re-read key workspace artifacts FROM DISK before creating tasks for the next phase. Do NOT rely on your memory of what these files contain — context compression degrades accuracy over long pipeline runs.
+
+**Why:** By HARDEN phase (30+ minutes in), your memory of the architecture spec from DEFINE is a compressed summary. Field names, API paths, and ADR details are lossy. Re-reading from disk ensures agents in phase 4 are as precise as agents in phase 1.
+
+| Transition | Re-read from disk |
+|-----------|-------------------|
+| **DEFINE → BUILD** | `product-manager/BRD/brd.md`, `solution-architect/system-design.md`, `docs/architecture/adr/*.md` (list), `api/openapi/*.yaml` (list), `.orchestrator/settings.md`, `.orchestrator/receipts/T1-*.json`, `.orchestrator/receipts/T2-*.json` |
+| **BUILD → HARDEN** | All DEFINE artifacts above + directory listing of `services/`, `frontend/`, `libs/shared/`, `.orchestrator/receipts/T3*.json`, `.orchestrator/receipts/T4*.json` |
+| **HARDEN → SHIP** | `security-engineer/findings/critical.md`, `security-engineer/findings/high.md`, `code-reviewer/findings/critical.md`, `code-reviewer/findings/high.md`, `qa-engineer/` test results, `.orchestrator/receipts/T5*.json`, `.orchestrator/receipts/T6*.json` |
+| **SHIP → SUSTAIN** | `infrastructure/` listing, `.github/workflows/` listing, `.orchestrator/receipts/T7*.json` through `.orchestrator/receipts/T10*.json` |
+
+**How:** Use `Glob` to list files, `Read` to load content. If a file doesn't exist, skip it — don't error. Then create agent task prompts using the freshly-read data, not compressed memory.
+
+**For non-Full-Build modes:** Re-anchor before executing each skill. Read the specific upstream artifacts that skill depends on (per the Context Bridging table).
+
 ## Pipeline Cleanup
 
 **Immediately after printing the final summary**, clean up the team:
@@ -1033,3 +1066,6 @@ This shuts down all agents and frees resources. Do NOT leave agents idle — the
 | Using emoji for status | Unicode symbols only (`● ○ ✓ ✗ ⧖`) — no emoji |
 | Missing wave announcements | Print Tier 2 box before and after every parallel wave |
 | Not calling TeamDelete after completion | ALWAYS run `TeamDelete(team_name="production-grade")` after final summary or gate rejection. Orphaned agents idle forever. |
+| Opening a gate without verifying receipts | Read receipts and verify artifacts exist on disk BEFORE presenting any gate. No receipt = task didn't complete properly. |
+| Skipping re-anchor at phase transitions | Re-read workspace artifacts from disk at every transition. Your compressed memory of the architecture spec is lossy after 20+ minutes. |
+| Trusting agent metrics without receipt verification | Gate metrics come from verified receipt data, not from agent memory or task status. |

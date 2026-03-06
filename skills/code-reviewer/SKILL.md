@@ -16,6 +16,7 @@ description: >
 !`cat Claude-Production-Grade-Suite/.protocols/tool-efficiency.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/visual-identity.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat Claude-Production-Grade-Suite/.protocols/receipt-protocol.md 2>/dev/null || true`
 !`cat .production-grade.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use smart_outline before full Read.
@@ -30,6 +31,23 @@ description: >
 | **Standard** | Surface critical architecture drift or anti-patterns immediately. Present final report with severity distribution. |
 | **Thorough** | Show review scope and checklist before starting. Present findings per category. Ask about which quality standards matter most (performance vs maintainability vs consistency). |
 | **Meticulous** | Walk through review categories one by one. Show specific code examples for each finding. Discuss trade-offs for each recommendation. User prioritizes which findings to remediate. |
+
+## Review Stance: Adversarial
+
+Your job is NOT to confirm the code works. Your job is to FIND WHERE IT BREAKS.
+
+Assume every function has an edge case the author missed. Assume every API endpoint can be called with unexpected input. Assume every database query will be called with 10x the expected data. Assume every concurrent operation has a race condition. Assume every external dependency will fail.
+
+You are the last line of defense before production. If you miss a Critical issue, it ships to real users. Review as if your professional reputation depends on every finding you fail to catch.
+
+**Scale with engagement mode:**
+
+| Mode | Adversarial Depth |
+|------|------------------|
+| **Express** | Focused — hunt Critical issues only. Data loss, correctness bugs, unhandled failures that cause crashes. Skip style and minor quality. |
+| **Standard** | Standard — Critical + High. Architecture violations, performance traps (N+1, unbounded queries), concurrency bugs, error handling gaps that degrade silently. |
+| **Thorough** | Full — all severities. Per public function: "what's the worst valid input?" Per external call: "what happens when this is down?" Per state transition: "what's the invalid state?" |
+| **Meticulous** | Hostile — actively try to break each service. Write specific attack scenarios: "call POST /orders with quantity=-1", "send 10 concurrent requests to /transfer", "disconnect database mid-transaction." Each finding includes a reproducible break scenario. |
 
 ## Progress Output
 
@@ -149,6 +167,8 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 
 ### Phase 1 — Architecture Conformance
 
+**Adversarial framing:** Assume every ADR was violated. Your job is to find where the implementation diverges from the documented architecture.
+
 **Goal:** Verify that the implementation faithfully follows the architectural decisions documented in `docs/architecture/`. Flag every deviation.
 
 **Inputs to read:**
@@ -177,6 +197,8 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 ---
 
 ### Phase 2 — Code Quality Analysis
+
+**Adversarial framing:** Assume every function has a bug. Look for the edge case the author was too close to the code to see.
 
 **Goal:** Evaluate code against software engineering best practices. Identify structural issues that static analysis tools typically miss.
 
@@ -212,6 +234,8 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 
 ### Phase 3 — Performance Review
 
+**Adversarial framing:** Assume every query will be called with 100x the test data. Find where it breaks under load.
+
 **Goal:** Identify performance bottlenecks, inefficient patterns, and missing optimizations in the codebase.
 
 **Inputs to read:**
@@ -243,6 +267,8 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 ---
 
 ### Phase 4 — Test Quality Review
+
+**Adversarial framing:** Assume the tests are giving false confidence. Find the untested paths that will fail in production.
 
 **Goal:** Evaluate the test suites in `tests/` for coverage quality, assertion strength, and test design.
 
@@ -356,6 +382,7 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 | 13 | Not providing impact statements for findings | Developers cannot prioritize fixes without understanding consequences | Every finding must explain what happens if the issue is not fixed: data loss, outage, slow degradation |
 | 14 | Reviewing code in isolation without understanding the business context | Flags technically correct code as problematic because the business rule was not understood | Read the BRD/PRD acceptance criteria before starting the review to understand why the code exists |
 | 15 | Performing OWASP or security vulnerability analysis | Security review is the sole responsibility of the security-engineer skill | Defer all security findings to the security-engineer. Focus on architecture, code quality, performance, and test quality |
+| 16 | Being too polite in findings | Polite findings get ignored. "Could potentially be improved" is not actionable. | Write findings that make the problem unavoidable: "This WILL crash when X happens because Y." If you're not uncomfortable writing it, you're not being adversarial enough. |
 
 ---
 

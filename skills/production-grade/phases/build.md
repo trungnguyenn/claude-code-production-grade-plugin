@@ -39,6 +39,17 @@ When Wave A completes, print the checkmark cascade:
 
 Then print Wave B announcement and completion similarly. Each agent's completion line MUST include concrete numbers.
 
+## Re-Anchor
+
+Before creating any agent tasks, re-read key artifacts from disk:
+- `Claude-Production-Grade-Suite/product-manager/BRD/brd.md`
+- `Claude-Production-Grade-Suite/solution-architect/system-design.md`
+- `docs/architecture/adr/*.md` (Glob to list, Read key ADRs)
+- `api/openapi/*.yaml` (Glob to list)
+- `.orchestrator/receipts/T1-*.json`, `.orchestrator/receipts/T2-*.json`
+
+Use this freshly-read data when writing agent task prompts below — not your compressed memory of DEFINE phase.
+
 ## Pre-Flight
 
 Read `.production-grade.yaml` to determine:
@@ -62,7 +73,7 @@ Invoke the software-engineer skill pattern.
 Write services to project root: services/, libs/shared/
 Write workspace artifacts to: Claude-Production-Grade-Suite/software-engineer/
 TDD enforced: write test → watch fail → implement → watch pass → refactor.
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T3a-software-engineer.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -79,7 +90,7 @@ Read .production-grade.yaml for framework and styling preferences.
 Invoke the frontend-engineer skill pattern.
 Write frontend to project root: frontend/
 Write workspace artifacts to: Claude-Production-Grade-Suite/frontend-engineer/
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T3b-frontend-engineer.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -101,7 +112,7 @@ Read .production-grade.yaml for paths and preferences.
 Write Dockerfiles per service, docker-compose.yml at project root.
 Write workspace artifacts to: Claude-Production-Grade-Suite/devops/containers/
 Validate: docker build succeeds for each service, docker-compose up starts all.
-When complete, mark your task as completed.""",
+When complete, write a receipt JSON to Claude-Production-Grade-Suite/.orchestrator/receipts/T4-devops.json with task, agent, phase, status, artifacts, metrics, verification. Then mark your task as completed.""",
   subagent_type="general-purpose",
   mode="bypassPermissions",
   run_in_background=True
@@ -111,10 +122,14 @@ When complete, mark your task as completed.""",
 ## Completion
 
 When all BUILD tasks complete:
-1. Verify all services compile and start
-2. Verify docker-compose brings up the full stack
-3. Log BUILD completion to workspace
-4. Read `phases/harden.md` and begin HARDEN phase
+1. **Verify receipts:** Read all BUILD receipts from `.orchestrator/receipts/` (T3a, T3b, T4). Verify all listed artifacts exist on disk.
+2. **Re-anchor:** Re-read from disk before transitioning to HARDEN:
+   - Directory listing of `services/`, `frontend/`, `libs/shared/` (what was actually built)
+   - `Claude-Production-Grade-Suite/solution-architect/system-design.md` (architecture reference for HARDEN agents)
+3. Verify all services compile and start
+4. Verify docker-compose brings up the full stack
+5. Log BUILD completion to workspace
+6. Read `phases/harden.md` and begin HARDEN phase — use freshly-read data for agent prompts
 
 ## Failure Handling
 
