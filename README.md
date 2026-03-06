@@ -280,7 +280,7 @@ Large skills split into **router + on-demand phases**. Only what's needed loads.
 ```
   Polymath ─────────── 6 modes    onboard | research | ideate | advise | translate | synthesize
   Software Engineer ── 5 phases   context | implement | cross-cutting | integration | local dev
-  Frontend Engineer ── 5 phases   analysis | design system | components | pages | testing
+  Frontend Engineer ── 6 phases   analysis | functional foundation | components | pages | design polish | testing
   Security Engineer ── 6 phases   threat model | code audit | auth | data | supply chain | remediation
   SRE ─────────────── 5 phases   readiness | SLOs | chaos | incidents | capacity
   Data Scientist ──── 6 phases   audit | LLM optimization | experiments | pipeline | ML infra | cost

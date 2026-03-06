@@ -44,30 +44,31 @@ Follow `Claude-Production-Grade-Suite/.protocols/visual-identity.md`. Print stru
 
 **Phase progress** (print during execution):
 ```
-  [1/5] Analysis
+  [1/6] Analysis
     ✓ BRD parsed, {N} page groups, {M} components identified
     ⧖ selecting framework...
-    ○ UI/UX mapping
 
-  [2/5] Design System
-    ✓ {N} UI primitives, theme tokens
-    ⧖ configuring Tailwind...
-    ○ light/dark mode
+  [2/6] Functional Foundation
+    ✓ default tokens, theme, Tailwind config
+    ⧖ light/dark mode...
 
-  [3/5] Components
+  [3/6] Components
     ✓ {N} feature components, {M} layout components
     ⧖ building data table...
-    ○ accessibility props
 
-  [4/5] Pages
-    ✓ {N} pages with routing
-    ⧖ wiring auth guards...
-    ○ state management
+  [4/6] Pages + Wiring
+    ✓ {N} pages with routing, {M} user flows verified
+    ✓ 0 dead elements, navigation graph complete
+    ⧖ cross-agent reconciliation...
 
-  [5/5] Testing & A11y
+  [5/6] Design & Polish
+    ✓ domain research: {domain} trends, {N} competitors analyzed
+    ✓ color: {primary} palette, {secondary} accent
+    ⧖ applying micro-interactions...
+
+  [6/6] Testing & A11y
     ✓ {N} component tests, a11y audit
     ⧖ running axe-core...
-    ○ Storybook stories
 ```
 
 **Completion summary** (print on finish — MUST include concrete numbers):
@@ -106,15 +107,16 @@ This skill runs as Phase 3b in the production-grade pipeline, in parallel with S
 | Phase | File | When to Load | Purpose |
 |-------|------|-------------|---------|
 | 1 | phases/01-analysis.md | Always first | Read BRD user stories, read API contracts, framework selection, UI/UX analysis |
-| 2 | phases/02-design-system.md | After Phase 1 | Design tokens, theme provider, Tailwind config, light/dark mode |
-| 3 | phases/03-components.md | After Phase 2 approved | UI primitives, layout components, feature components, accessibility |
+| 2 | phases/02-design-system.md | After Phase 1 | **Functional defaults only** — minimal tokens, system fonts, neutral palette. NOT final design. |
+| 3 | phases/03-components.md | After Phase 2 | UI primitives, layout components, feature components, accessibility |
 | 4 | phases/04-pages-routes.md | After Phase 3 | Page layouts, routing, auth guards, state management, API client layer |
 | 4b | (inline — see Functional Completeness below) | After Phase 4 | Dead element scan, navigation graph, interaction trace, cross-agent reconciliation |
-| 5 | phases/05-testing-a11y.md | After Phase 4b verified | Component tests, e2e tests, accessibility audit, performance budget, Storybook |
+| 5 | phases/05-design-polish.md | After Phase 4b verified | **Design research, color theory, typography, micro-interactions, visual polish** |
+| 6 | phases/06-testing-a11y.md | After Phase 5 | Component tests, e2e tests, accessibility audit, performance budget, Storybook |
 
 ## Dispatch Protocol
 
-Read the relevant phase file before starting that phase. Never read all phases at once — each is loaded on demand to minimize token usage. After completing a phase, proceed to the next by loading its file.
+Read the relevant phase file before starting that phase. Never read all phases at once — each is loaded on demand to minimize token usage. After completing a phase, proceed to the next by loading its file. Phase 4b (Functional Verification) is inline in this SKILL.md — no separate file.
 
 ## Parallel Execution
 
@@ -164,7 +166,8 @@ Agent(prompt="Build dashboard pages (overview, analytics, activity). Use compone
 Agent(prompt="Build settings pages (profile, billing, team, integrations). Use components from frontend/app/components/. Write to frontend/app/pages/settings/.", ...)
 ```
 
-6. Phase 5 (Testing + A11y) runs sequentially — needs all components and pages
+6. Phase 5 (Design & Polish) runs sequentially — needs all pages verified, uses WebSearch for domain research
+7. Phase 6 (Testing + A11y) runs sequentially — tests the final polished version
 
 **Quality guarantee:** Every layout/feature component imports from `components/ui/` (primitives). Every page imports from the completed component library. No duplicate implementations. Consistent UI across the entire app.
 
@@ -173,13 +176,16 @@ Agent(prompt="Build settings pages (profile, billing, team, integrations). Use c
 ## Process Flow
 
 ```
-Triggered -> Phase 1: UI/UX Analysis -> Phase 2: Design System
+Triggered -> Phase 1: UI/UX Analysis -> Phase 2: Functional Design Foundation (defaults)
   -> Phase 3a: UI Primitives (SEQUENTIAL — foundational atoms)
   -> Phase 3b: Layout + Feature Components (PARALLEL — both use primitives)
   -> Phase 4: Pages (PARALLEL: 1 Agent per route group)
-  -> Phase 4b: Functional Verification (SEQUENTIAL — cross-agent reconciliation)
-  -> Phase 5: Testing + A11y -> Suite Complete
+  -> Phase 4b: Functional Verification (SEQUENTIAL — everything works?)
+  -> Phase 5: Design & Polish (SEQUENTIAL — research, color theory, beautify)
+  -> Phase 6: Testing + A11y -> Suite Complete
 ```
+
+**The philosophy: make it work, then make it beautiful.** Phase 2 gives you enough to build. Phase 5 gives you a professionally designed product. Testing happens last on the final, polished version.
 
 ## Functional Completeness — The "Does It Work?" Rule
 
@@ -253,7 +259,7 @@ When parallel page agents complete (auth agent, dashboard agent, settings agent,
 | Tests | `frontend/tests/` | Component, page, hook, e2e, a11y tests |
 | Storybook | `frontend/storybook/` | Component documentation and visual testing |
 | Config | `frontend/` root | package.json, tsconfig, tailwind, eslint, playwright, lighthouse |
-| Workspace | `Claude-Production-Grade-Suite/frontend-engineer/` | Analysis docs, performance budget, progress notes |
+| Workspace | `Claude-Production-Grade-Suite/frontend-engineer/` | Analysis docs, design research, design decisions, performance budget, progress notes |
 
 ## Common Mistakes
 

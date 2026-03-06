@@ -11,7 +11,7 @@ All notable changes to the Production Grade Plugin.
 
 ### Changed
 - **All 14 skills** now load `boundary-safety.md` at startup.
-- **Frontend Engineer** — Phase 4b added (functional verification), 7 new Common Mistakes entries for dead elements, navigation misuse, auth flow duplication, callback misconfiguration, and unconditional interceptors. Phase 4 validation loop now requires functional verification before Phase 5. Quality bar updated with zero-dead-elements and navigation completeness requirements.
+- **Frontend Engineer** — restructured from 5 to 6 phases with "make it work, then make it beautiful" philosophy. Phase 2 reduced to functional defaults (no design research yet). Phase 4b added (functional verification). NEW Phase 5 (Design & Polish) — domain research via WebSearch, color theory, typography selection, micro-interactions, visual hierarchy, dark mode polish. Phase 6 (Testing) now tests the final polished version. 7 new Common Mistakes entries.
 - **Code Reviewer** Phase 2 — new "Boundary Safety" review dimension (7 checks): framework abstraction misuse, duplicated control flow, self-referencing config, unconditional interceptors, identity consistency, dead interactive elements, navigation completeness.
 - **QA Engineer** Phase 5 (E2E) — 2 new rules requiring cross-boundary journey testing and framework navigation correctness verification. 2 new Common Mistakes entries.
 - **Orchestrator** Common Mistakes table expanded with 4 boundary safety anti-patterns.

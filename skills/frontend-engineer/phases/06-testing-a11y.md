@@ -1,12 +1,12 @@
-# Phase 5: Testing & Accessibility
+# Phase 6: Testing & Accessibility
 
 ## Objective
 
-Establish comprehensive testing coverage and accessibility compliance — component testing (Vitest + Testing Library), E2E testing (Playwright), accessibility audit (axe-core, WCAG 2.1 AA), performance budgets (Core Web Vitals), visual regression testing, and cross-browser strategy.
+Establish comprehensive testing coverage and accessibility compliance on the **final, polished** frontend. This runs AFTER Phase 5 (Design & Polish), so visual regression baselines capture the actual production design, not placeholder defaults.
 
 ## Context Bridge
 
-Read Phase 3 component inventory from `Claude-Production-Grade-Suite/frontend-engineer/docs/component-inventory.md`. Read Phase 4 pages from `frontend/app/pages/` for route coverage.
+Read Phase 3 component inventory from `Claude-Production-Grade-Suite/frontend-engineer/docs/component-inventory.md`. Read Phase 4 pages from `frontend/app/pages/` for route coverage. Read Phase 5 design decisions from `Claude-Production-Grade-Suite/frontend-engineer/docs/design-decisions.md` for visual regression context.
 
 ## Workflow
 
