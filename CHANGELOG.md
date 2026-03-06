@@ -14,6 +14,9 @@ All notable changes to the Production Grade Plugin.
 - **All 14 skills** now load `freshness-protocol.md` at startup alongside existing protocols.
 - **Orchestrator protocol table** updated to include freshness protocol in workspace bootstrap.
 
+### Fixed
+- **Orphaned agents after pipeline completion** — orchestrator now calls `TeamDelete` after the final summary and on gate rejection. Previously, all agents remained idle indefinitely after work was done, requiring manual intervention to shut down.
+
 ## [4.3.0] — 2026-03-06
 
 ### Added

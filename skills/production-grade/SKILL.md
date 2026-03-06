@@ -128,6 +128,7 @@ All modes share these behaviors:
 - Read `.production-grade.yaml` for path overrides
 - Read existing workspace state if present
 - Engagement mode + parallelism: ask ONLY if mode involves 3+ skills. For 1-2 skill modes, use Standard engagement + Sequential execution (overhead of asking isn't worth it).
+- **Cleanup:** After mode completion (or gate rejection), run `TeamDelete(team_name="production-grade")` if a team was created. Never leave orphaned agents.
 
 ### Non-Full-Build Visual Output
 
@@ -992,6 +993,23 @@ Every agent follows:
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
+## Pipeline Cleanup
+
+**Immediately after printing the final summary**, clean up the team:
+
+```python
+TeamDelete(team_name="production-grade")
+```
+
+This shuts down all agents and frees resources. Do NOT leave agents idle — the pipeline is complete, there is no further work.
+
+**This step is MANDATORY.** Without it, agents remain alive indefinitely consuming resources. The cleanup must happen regardless of:
+- Which execution mode was used (Full Build, Feature, Harden, etc.)
+- Whether the pipeline succeeded or was cancelled at a gate
+- Whether the user approved or rejected the final gate
+
+**If the user rejects at any gate** (Gate 1, 2, or 3), also run `TeamDelete` before stopping. Never leave orphaned agents.
+
 ## Common Mistakes
 
 | Mistake | Fix |
@@ -1014,3 +1032,4 @@ Every agent follows:
 | Skipping pipeline dashboard reprint | Dashboard reprints at every phase transition and gate |
 | Using emoji for status | Unicode symbols only (`● ○ ✓ ✗ ⧖`) — no emoji |
 | Missing wave announcements | Print Tier 2 box before and after every parallel wave |
+| Not calling TeamDelete after completion | ALWAYS run `TeamDelete(team_name="production-grade")` after final summary or gate rejection. Orphaned agents idle forever. |
