@@ -17,6 +17,7 @@ description: >
 !`cat Claude-Production-Grade-Suite/.protocols/visual-identity.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/freshness-protocol.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat Claude-Production-Grade-Suite/.protocols/boundary-safety.md 2>/dev/null || true`
 !`cat .production-grade.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use smart_outline before full Read.
@@ -227,6 +228,15 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 12. **State management** — Is state lifted to the appropriate level? Flag prop drilling > 3 levels. Flag global state used for local concerns.
 13. **Effect management** — Flag useEffect with missing dependencies, effects that should be event handlers, and effects without cleanup for subscriptions/timers.
 14. **Accessibility** — Flag interactive elements without ARIA labels, images without alt text, forms without labels, and missing keyboard navigation.
+
+**Boundary Safety** (see `boundary-safety.md` protocol):
+15. **Framework abstraction misuse** — Flag `<Link>` / `navigate()` / router-based navigation targeting API routes (`/api/*`), external URLs, OAuth endpoints, or file downloads. These need raw `<a href>` or `window.location`.
+16. **Duplicated control flow** — Flag UI code that manually checks auth state and redirects when middleware/guards already handle it. Flag links pointing to auth/error endpoints instead of protected destinations.
+17. **Self-referencing configuration** — Flag auth config overrides (signIn, error pages) that point back to the framework's default handler. Compare override values against known defaults.
+18. **Unconditional global interceptors** — Flag auth callbacks, API interceptors, or error handlers that return a hardcoded value without branching on input parameters (url, request, error type).
+19. **Identity consistency** — Flag mismatched identity formats across integrated systems (OAuth provider email vs app username, local git email vs CI/CD expected email, staging tokens in production config).
+20. **Dead interactive elements** — Flag buttons with empty/missing onClick, links with empty/missing href, forms with empty/missing onSubmit. Every interactive element that renders MUST be wired to a real action. Dead elements are Critical findings.
+21. **Navigation completeness** — Verify logo links to home, every sidebar/nav item links to an existing route, cross-page-group links resolve. Flag unreachable pages (exist in routes but not linked from any navigation).
 
 **Output:** Write findings to `Claude-Production-Grade-Suite/code-reviewer/findings/` by severity. Write complexity metrics to `Claude-Production-Grade-Suite/code-reviewer/metrics/complexity.json`.
 

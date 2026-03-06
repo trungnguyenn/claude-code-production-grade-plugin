@@ -2,6 +2,21 @@
 
 All notable changes to the Production Grade Plugin.
 
+## [5.1.0] — 2026-03-07
+
+### Added
+- **Boundary safety protocol** — new shared protocol (`boundary-safety.md`) with 6 structural patterns that cause silent failures at system boundaries. Derived from real deployment bugs found during a production-grade pipeline run on PingBase.
+- **6 patterns enforced**: (1) framework abstractions break at boundaries — use platform primitives when crossing domains, (2) delegate to framework control flow — don't duplicate middleware logic in UI, (3) self-referencing config creates infinite loops, (4) global interceptors must be conditional, (5) test full user journeys across system boundaries, (6) identity must be consistent across integrated systems.
+- **Frontend functional completeness enforcement** — new Phase 4b (Functional Verification Pass) in the Frontend Engineer skill. Dead Element Rule: any button/link/form that renders but does nothing is a Critical bug. Navigation Graph Verification: logo links to home, every nav item resolves, cross-page-group links work. Interaction Trace: top 5 user flows walked through click-by-click. Cross-Agent Reconciliation: after parallel page agents complete, verify all cross-references resolve and shared layouts contain routes from ALL page groups.
+
+### Changed
+- **All 14 skills** now load `boundary-safety.md` at startup.
+- **Frontend Engineer** — Phase 4b added (functional verification), 7 new Common Mistakes entries for dead elements, navigation misuse, auth flow duplication, callback misconfiguration, and unconditional interceptors. Phase 4 validation loop now requires functional verification before Phase 5. Quality bar updated with zero-dead-elements and navigation completeness requirements.
+- **Code Reviewer** Phase 2 — new "Boundary Safety" review dimension (7 checks): framework abstraction misuse, duplicated control flow, self-referencing config, unconditional interceptors, identity consistency, dead interactive elements, navigation completeness.
+- **QA Engineer** Phase 5 (E2E) — 2 new rules requiring cross-boundary journey testing and framework navigation correctness verification. 2 new Common Mistakes entries.
+- **Orchestrator** Common Mistakes table expanded with 4 boundary safety anti-patterns.
+- **Orchestrator** protocol table updated to include `boundary-safety.md`.
+
 ## [5.0.0] — 2026-03-06
 
 ### Added

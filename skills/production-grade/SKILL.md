@@ -24,6 +24,7 @@ description: >
 !`cat Claude-Production-Grade-Suite/.protocols/visual-identity.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/freshness-protocol.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat Claude-Production-Grade-Suite/.protocols/boundary-safety.md 2>/dev/null || true`
 
 <IMPORTANT>
 This skill ENHANCES Claude Code's development capabilities. Without it, Claude Code produces code files. With it, Claude Code produces complete production-ready systems — architecture, tested code, security audit, CI/CD, and documentation.
@@ -125,7 +126,7 @@ For non-Full-Build modes, use the lightweight execution flows below. For Full Bu
 
 All modes share these behaviors:
 - Bootstrap workspace: `mkdir -p Claude-Production-Grade-Suite/.protocols/ Claude-Production-Grade-Suite/.orchestrator/`
-- Write shared protocols (same as Full Build step 3, including `visual-identity.md`, `freshness-protocol.md`, and `receipt-protocol.md`)
+- Write shared protocols (same as Full Build step 3, including `visual-identity.md`, `freshness-protocol.md`, `receipt-protocol.md`, and `boundary-safety.md`)
 - Read `.production-grade.yaml` for path overrides
 - Read existing workspace state if present
 - Engagement mode + parallelism: ask ONLY if mode involves 3+ skills. For 1-2 skill modes, use Standard engagement + Sequential execution (overhead of asking isn't worth it).
@@ -384,6 +385,7 @@ mkdir -p Claude-Production-Grade-Suite/.orchestrator/receipts/
 | `visual-identity.md` | Visual design language: container hierarchy (Tier 1/2/3), icon vocabulary, progress patterns, gate ceremonies, wave announcements, completion summaries, timing |
 | `freshness-protocol.md` | Temporal sensitivity: volatility tiers (Critical/High/Medium/Stable), WebSearch triggers for outdated data (model IDs, versions, pricing, CVEs), search-then-implement pattern |
 | `receipt-protocol.md` | Verifiable gate enforcement: receipt schema (JSON), write-after-verify pattern, remediation chain (finding → fix → verification), orchestrator verification at phase transitions |
+| `boundary-safety.md` | 6 structural patterns for system boundary safety: framework abstraction limits, control flow delegation, self-referencing config detection, conditional global interceptors, cross-boundary journey testing, identity consistency across integrations |
 
 Read these from the plugin's `skills/_shared/protocols/` directory and copy them. If plugin path is unavailable, write from the summaries above.
 
@@ -1069,3 +1071,7 @@ This shuts down all agents and frees resources. Do NOT leave agents idle — the
 | Opening a gate without verifying receipts | Read receipts and verify artifacts exist on disk BEFORE presenting any gate. No receipt = task didn't complete properly. |
 | Skipping re-anchor at phase transitions | Re-read workspace artifacts from disk at every transition. Your compressed memory of the architecture spec is lossy after 20+ minutes. |
 | Trusting agent metrics without receipt verification | Gate metrics come from verified receipt data, not from agent memory or task status. |
+| Using framework navigation for non-page targets | `<Link>` and `navigate()` are for pages only. API routes, external URLs, OAuth flows, file downloads need raw `<a href>` or `window.location`. See boundary-safety protocol. |
+| Duplicating framework control flow in UI | Don't link to `/api/auth/signin` — link to the protected destination and let middleware redirect. See boundary-safety protocol pattern 2. |
+| Global interceptors without conditional logic | Auth callbacks, API interceptors, and error handlers must branch on input. A hardcoded return value breaks every flow that passes through. See boundary-safety protocol pattern 4. |
+| Testing individual hops but not full user journeys | Auth test that checks "token issued" but never checks "user lands on dashboard" misses the real bugs. E2E must trace complete cross-system flows. |

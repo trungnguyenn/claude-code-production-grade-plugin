@@ -16,6 +16,7 @@ description: >
 !`cat Claude-Production-Grade-Suite/.protocols/visual-identity.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/freshness-protocol.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat Claude-Production-Grade-Suite/.protocols/boundary-safety.md 2>/dev/null || true`
 !`cat .production-grade.yaml 2>/dev/null || echo "No config — using defaults"`
 !`cat Claude-Production-Grade-Suite/.orchestrator/codebase-context.md 2>/dev/null || true`
 
@@ -341,6 +342,8 @@ Write `docker-compose.test.yml` and `setup.ts` to `tests/integration/`.
 8. Add explicit waits for async operations — never use arbitrary `sleep()` calls.
 9. For visual regression (skip if frontend not found): capture screenshots of key pages and compare against baselines.
 10. Configure test timeouts generously (30s+ per test) — E2E is slow by nature.
+11. **Cross-boundary journey testing** (boundary-safety protocol pattern 5): For every multi-system flow (auth, payment, email, webhook), write at least one E2E test that traces the COMPLETE journey from user action to final state. Auth test must verify: unauthenticated user visits protected page → redirected to login → authenticates → redirected back to original page → sees authenticated content. Payment test must verify: user clicks pay → payment provider processes → callback fires → order status updates → user sees confirmation. Do NOT just test individual hops — test the full chain.
+12. **Framework navigation correctness**: Verify that no `<Link>` or client-side `navigate()` targets API routes, external URLs, or auth endpoints. These must use raw `<a href>` or `window.location` for full HTTP requests.
 
 **Output:** Write E2E tests and page objects to `tests/e2e/`. Write Playwright or Cypress config.
 
@@ -426,6 +429,8 @@ Write `docker-compose.test.yml` and `setup.ts` to `tests/integration/`.
 | 13 | Contract tests that only check status codes | Schema changes, missing fields, and type mismatches go undetected | Validate full response body shape, field types, required fields, and enum values against the contract |
 | 14 | No seed data strategy — each test creates its own world from scratch | Integration and E2E suites become extremely slow; redundant setup logic everywhere | Build a shared seed-data layer with factories and a seed runner; tests add only their unique data on top |
 | 15 | Generating test files without reading the actual implementation first | Tests reference nonexistent functions, wrong parameter names, or incorrect module paths | Always read the source file before writing its test file; match imports, function signatures, and error types exactly |
+| 16 | Auth E2E tests that only check "token returned" | Misses redirect bugs, callback misconfig, and infinite loops that only appear in the full browser flow | Test the complete journey: visit protected page → redirect to login → authenticate → land on original page with authenticated state |
+| 17 | Not testing cross-system flows end-to-end | Payment tests that check "Stripe returns success" but never check "order status is updated and user sees confirmation" miss the integration point bugs | For every multi-system flow (auth, payment, webhook), trace from user action to final visible state |
 
 ---
 

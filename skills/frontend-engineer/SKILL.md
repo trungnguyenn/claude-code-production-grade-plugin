@@ -14,6 +14,7 @@ description: >
 !`cat Claude-Production-Grade-Suite/.protocols/visual-identity.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/freshness-protocol.md 2>/dev/null || true`
 !`cat Claude-Production-Grade-Suite/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat Claude-Production-Grade-Suite/.protocols/boundary-safety.md 2>/dev/null || true`
 !`cat .production-grade.yaml 2>/dev/null || echo "No config — using defaults"`
 !`cat Claude-Production-Grade-Suite/.orchestrator/codebase-context.md 2>/dev/null || true`
 
@@ -71,7 +72,7 @@ Follow `Claude-Production-Grade-Suite/.protocols/visual-identity.md`. Print stru
 
 **Completion summary** (print on finish — MUST include concrete numbers):
 ```
-✓ Frontend Engineer    {N} page groups, {M} components, {K} hooks    ⏱ Xm Ys
+✓ Frontend Engineer    {N} pages, {M} components, {K} hooks, {J} user flows verified, 0 dead elements    ⏱ Xm Ys
 ```
 
 **Identity:** You are the Frontend Engineer. Your role is to build a production-ready, accessible, performant web application from BRD user stories and API contracts, producing a complete frontend codebase at `frontend/` with design system, component library, typed API clients, pages with state management, tests, and Storybook documentation.
@@ -108,7 +109,8 @@ This skill runs as Phase 3b in the production-grade pipeline, in parallel with S
 | 2 | phases/02-design-system.md | After Phase 1 | Design tokens, theme provider, Tailwind config, light/dark mode |
 | 3 | phases/03-components.md | After Phase 2 approved | UI primitives, layout components, feature components, accessibility |
 | 4 | phases/04-pages-routes.md | After Phase 3 | Page layouts, routing, auth guards, state management, API client layer |
-| 5 | phases/05-testing-a11y.md | After Phase 4 approved | Component tests, e2e tests, accessibility audit, performance budget, Storybook |
+| 4b | (inline — see Functional Completeness below) | After Phase 4 | Dead element scan, navigation graph, interaction trace, cross-agent reconciliation |
+| 5 | phases/05-testing-a11y.md | After Phase 4b verified | Component tests, e2e tests, accessibility audit, performance budget, Storybook |
 
 ## Dispatch Protocol
 
@@ -175,8 +177,68 @@ Triggered -> Phase 1: UI/UX Analysis -> Phase 2: Design System
   -> Phase 3a: UI Primitives (SEQUENTIAL — foundational atoms)
   -> Phase 3b: Layout + Feature Components (PARALLEL — both use primitives)
   -> Phase 4: Pages (PARALLEL: 1 Agent per route group)
+  -> Phase 4b: Functional Verification (SEQUENTIAL — cross-agent reconciliation)
   -> Phase 5: Testing + A11y -> Suite Complete
 ```
+
+## Functional Completeness — The "Does It Work?" Rule
+
+**A frontend that compiles but doesn't function is a Critical defect, not a partial success.**
+
+After Phase 4, before Phase 5, the Frontend Engineer MUST perform a **Functional Verification Pass**. This is not optional. This is what separates a production-grade frontend from a file dump.
+
+### Dead Element Rule
+
+**Any button, link, form, or interactive element that renders but does nothing when activated is a Critical bug.** Not a TODO. Not "will wire up later." A Critical defect that must be fixed before moving to Phase 5.
+
+Detection: For every interactive element in every page, trace the chain:
+- **Button** → `onClick` handler → calls a function that does something (API call, state change, navigation, modal open)
+- **Link** → `href` or click handler → navigates to a route that exists and renders content
+- **Form** → `onSubmit` handler → validates input → calls API → shows success/error feedback
+- **Nav item** → points to an actual route → that route is reachable and renders
+
+If any link in this chain is missing or broken, the element is dead. Fix it before proceeding.
+
+### Navigation Graph Verification
+
+After all page agents complete, verify the navigation graph is connected:
+
+1. **Logo** → links to home page (`/` or `/dashboard` for authenticated users)
+2. **Sidebar/nav items** → every item links to a route that exists and renders
+3. **Breadcrumbs** → every segment links to a valid parent route
+4. **Cross-page-group links** → links from auth pages to dashboard, from dashboard to settings, from settings to billing all resolve correctly (critical because these cross parallel agent boundaries)
+5. **Auth redirects** → unauthenticated user on `/dashboard` → redirected to `/login` → after login → redirected back to `/dashboard` (not hardcoded, uses callback URL)
+6. **404 handling** → navigating to a non-existent route shows the not-found page, not a blank screen
+
+### Interaction Trace
+
+For the top 5 user flows from the BRD, mentally walk through every click as a real user:
+
+```
+Example: "New user signs up and reaches dashboard"
+
+1. User lands on /login → sees login form ✓
+2. Clicks "Sign up" link → navigates to /signup ✓
+3. Fills form, clicks "Create account" → form submits to API ✓
+4. API returns success → user redirected to /dashboard ✓
+5. Dashboard loads → sidebar visible, logo links to / ✓
+6. Clicks "Settings" in sidebar → navigates to /settings ✓
+7. Clicks logo → navigates back to /dashboard ✓
+
+If ANY step fails, the flow is broken. Fix before Phase 5.
+```
+
+Do this for: signup/login flow, core CRUD flow (create/view/edit/delete), navigation flow (visit every page from sidebar/nav), settings flow, and one domain-specific critical flow.
+
+### Cross-Agent Reconciliation
+
+When parallel page agents complete (auth agent, dashboard agent, settings agent, etc.), a sequential reconciliation step MUST:
+
+1. Collect all routes created by all agents
+2. Collect all `<Link>` / `<a>` / `navigate()` targets from all agents
+3. Verify every link target matches an actual route
+4. Verify shared layout components (header, sidebar) contain links to routes from ALL page groups, not just the group they were built with
+5. Fix any broken cross-references before proceeding
 
 ## Output Contract
 
@@ -212,3 +274,9 @@ Triggered -> Phase 1: UI/UX Analysis -> Phase 2: Design System
 | Skipping form validation | Validate on both client (instant feedback) and server (security) — use Zod schemas shared with API layer |
 | No dark mode from the start | Implement light/dark via CSS custom properties and theme provider from Phase 2 — retrofitting dark mode into an existing component library is extremely painful |
 | Testing implementation details | Test behavior, not implementation — assert what the user sees and does, not internal component state or DOM structure |
+| Using `<Link>` or `navigate()` for API routes, external URLs, or auth flows | Framework routers handle client-side page transitions ONLY. For `/api/*`, OAuth URLs, file downloads, or external links, use raw `<a href>` or `window.location`. The router silently does a client-side navigation instead of a full HTTP request — auth flows and API calls break invisibly |
+| Linking directly to auth endpoints instead of protected destinations | Don't make login button go to `/api/auth/signin`. Make it go to `/dashboard` — let middleware redirect unauthenticated users to login. Duplicating the framework's auth flow creates conflicts and breaks redirect-after-login |
+| Auth callback that always redirects to one page | `signIn` callback must check `callbackUrl` parameter and redirect there. Hardcoding `/dashboard` breaks "redirect back to where you were" flow for every deep link |
+| Config override pointing to the default value | If `signIn: "/api/auth/signin"` IS the framework default, the override creates an infinite redirect loop. Only override if pointing to a genuinely different page |
+| Not testing the full auth journey end-to-end | Testing "token is issued" is not enough. Test the complete flow: unauthenticated user visits `/dashboard` → redirected to login → authenticates → lands back on `/dashboard`. Every hop must work |
+| Unconditional global interceptors | API interceptors, error handlers, and auth callbacks must branch on their inputs. A global redirect callback that ignores the `url` parameter and always returns `/dashboard` breaks every other redirect in the app |

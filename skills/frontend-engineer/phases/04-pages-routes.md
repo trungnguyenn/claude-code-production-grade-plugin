@@ -230,6 +230,16 @@ Before moving to Phase 5:
 - State management stores are wired and functional
 - All pages implement loading/error/empty states
 
+**Then run the Functional Verification Pass (see main SKILL.md):**
+
+- [ ] **Dead element scan:** Every button has an onClick that does something. Every link goes to a route that exists. Every form has an onSubmit that calls an API. Zero dead interactive elements.
+- [ ] **Navigation graph:** Logo links to home. Every sidebar/nav item links to a real route. Breadcrumbs resolve. Cross-page-group links work (auth→dashboard, dashboard→settings, etc.).
+- [ ] **Interaction trace:** Walk through the top 5 user flows click-by-click. Sign up → dashboard → create something → view it → edit it → navigate to settings → return. Every step must work.
+- [ ] **Cross-agent reconciliation:** If pages were built by parallel agents, verify all cross-references resolve. Shared layout (header, sidebar) includes routes from ALL page groups.
+- [ ] **Auth redirect chain:** Unauthenticated visit to protected page → login → authenticate → return to original page (not hardcoded dashboard).
+
+**Only proceed to Phase 5 after ALL functional verification checks pass.**
+
 **Present key pages to user via AskUserQuestion for approval before proceeding.**
 
 ## Quality Bar
@@ -240,3 +250,6 @@ Before moving to Phase 5:
 - All pages have SEO metadata
 - Mobile-first responsive design at all breakpoints
 - No `useEffect` for data fetching (React Query used instead)
+- **Zero dead interactive elements** — every button, link, and form does something when clicked
+- **Navigation is complete** — every page reachable from at least one nav element, logo links to home
+- **Top 5 user flows verified** — walked through click-by-click, every step works end-to-end
