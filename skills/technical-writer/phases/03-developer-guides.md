@@ -8,7 +8,7 @@ Enable a new developer to go from zero to productive. Write task-oriented guides
 
 | Input | Path | What to Extract |
 |-------|------|-----------------|
-| DevOps artifacts | `infrastructure/`, `docker-compose.yml` | Docker configs, environment setup |
+| DevOps artifacts | `infra/`, `docker-compose.yml` | Docker configs, environment setup |
 | CI/CD pipelines | `.github/workflows/` | Build steps, test commands, deploy process |
 | Source structure | `services/`, `frontend/`, `libs/` | Module layout, build files, package managers |
 | Architecture docs | `docs/architecture/` | ADRs, service map, tech stack |

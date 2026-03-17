@@ -88,7 +88,7 @@ This skill reads from two upstream sources:
 - `api/openapi/*.yaml` — OpenAPI 3.1 specs for typed client generation
 - `docs/architecture/tech-stack.md` — Framework, language, auth provider decisions
 - `docs/architecture/system-diagrams/` — C4 container diagrams for understanding service boundaries
-- `docs/architecture/architecture-decision-records/` — ADRs for auth strategy, API patterns, multi-tenancy
+- `docs/architecture/adrs/` — ADRs for auth strategy, API patterns, multi-tenancy
 - `schemas/erd.md` — Entity relationships for understanding data shapes
 
 ### From BRD

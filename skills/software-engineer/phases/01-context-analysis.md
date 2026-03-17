@@ -14,7 +14,7 @@ Read ALL architecture artifacts from the project root before writing any code. V
 | Async contracts | `api/asyncapi/*.yaml` | Event schemas, channels, message formats |
 | Data models | `schemas/erd.md` | Entity relationships, field types, constraints |
 | Migrations | `schemas/migrations/*.sql` | Table structures, indexes, constraints |
-| ADRs | `docs/architecture/architecture-decision-records/` | Architecture pattern, communication patterns, data strategy, auth, multi-tenancy |
+| ADRs | `docs/architecture/adrs/` | Architecture pattern, communication patterns, data strategy, auth, multi-tenancy |
 | Scaffold structure | `services/` | Service names, directory layout, existing boilerplate |
 
 ## 1.2 — Extract Implementation Decisions
@@ -89,7 +89,7 @@ This phase reads from the Solution Architect's outputs:
 | `schemas/migrations/*.sql` | Table structures |
 | `schemas/erd.md` | Relationships, constraints |
 | `docs/architecture/tech-stack.md` | Language, framework, libraries |
-| `docs/architecture/architecture-decision-records/` | Patterns, trade-offs |
+| `docs/architecture/adrs/` | Patterns, trade-offs |
 | `services/` (scaffolded) | Service names, structure |
 
 **Do NOT modify architecture files** (`api/`, `schemas/`, `docs/architecture/`). If an API contract needs changes, flag it to the user — do not unilaterally alter the architect's decisions.

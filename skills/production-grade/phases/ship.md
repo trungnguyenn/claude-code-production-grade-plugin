@@ -44,7 +44,7 @@ Before creating SHIP agent tasks, re-read key artifacts from disk:
 - `Claude-Production-Grade-Suite/security-engineer/findings/` (findings for remediation)
 - `Claude-Production-Grade-Suite/code-reviewer/findings/critical.md`, `high.md`
 - `Claude-Production-Grade-Suite/solution-architect/system-design.md` (architecture for infra)
-- Directory listing of `services/`, `infrastructure/` (what exists)
+- Directory listing of `services/`, `infra/` (what exists)
 - All HARDEN receipts from `.orchestrator/receipts/`
 
 Use this freshly-read data when writing agent task prompts below.
@@ -64,7 +64,7 @@ Read implementation: services/, frontend/
 Read .production-grade.yaml for paths and preferences.
 Read protocols from: Claude-Production-Grade-Suite/.protocols/
 Generate: Terraform/Pulumi, K8s manifests (if microservices), CI/CD pipelines, monitoring dashboards.
-Write to project root: infrastructure/, .github/workflows/
+Write to project root: infra/, .github/workflows/
 Write workspace artifacts to: Claude-Production-Grade-Suite/devops/
 DO NOT define SLOs — add placeholder: "SLO thresholds defined by SRE."
 DO NOT write runbooks — SRE writes runbooks to docs/runbooks/.

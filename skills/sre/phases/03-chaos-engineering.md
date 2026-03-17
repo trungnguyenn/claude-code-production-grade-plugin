@@ -13,7 +13,7 @@ Proactively discover failure modes before users do. Build confidence that the sy
 ## Inputs
 
 - Architecture docs — dependency map, single points of failure
-- `infrastructure/kubernetes/` — deployment topology
+- `infra/kubernetes/` — deployment topology
 - Phase 1 findings — known weaknesses to target
 - Phase 2 SLOs — steady-state metrics to monitor during experiments
 

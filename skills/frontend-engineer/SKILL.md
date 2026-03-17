@@ -93,7 +93,7 @@ If `Claude-Production-Grade-Suite/.orchestrator/codebase-context.md` exists and 
 | Category | Inputs | Behavior if Missing |
 |----------|--------|-------------------|
 | Critical | `api/openapi/*.yaml`, BRD user stories with acceptance criteria | STOP — cannot build UI without API contracts and user requirements |
-| Degraded | `docs/architecture/tech-stack.md`, `docs/architecture/architecture-decision-records/` | WARN — ask user for framework/auth choices via AskUserQuestion |
+| Degraded | `docs/architecture/tech-stack.md`, `docs/architecture/adrs/` | WARN — ask user for framework/auth choices via AskUserQuestion |
 | Optional | `docs/architecture/system-diagrams/`, `schemas/erd.md`, branding guidelines | Continue — use sensible defaults |
 
 ## Pipeline Position

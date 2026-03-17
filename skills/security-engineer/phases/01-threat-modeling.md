@@ -14,7 +14,7 @@ Read Phase 0 (Reconnaissance) outputs. You should already know every service, it
 - API specs -- `api/` (OpenAPI, gRPC proto, AsyncAPI)
 - Data schemas -- `schemas/` (ERD, migrations, data flow diagrams)
 - Implementation code -- `services/`, `frontend/` (controllers, middleware, routes)
-- Infrastructure configs -- `infrastructure/` (Terraform, K8s manifests)
+- Infrastructure configs -- `infra/` (Terraform, K8s manifests)
 - Prior pipeline artifacts -- any existing `Claude-Production-Grade-Suite/` outputs from other skills
 
 If any inputs are missing, note the gap and flag it as an incomplete audit area in the output.

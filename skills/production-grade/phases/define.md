@@ -23,7 +23,7 @@ On phase completion, print transition:
 Read `.production-grade.yaml` for path overrides:
 - `paths.brd` → BRD output location (default: `Claude-Production-Grade-Suite/product-manager/BRD/`)
 - `paths.api_contracts` → API contract location (default: `api/openapi/*.yaml`)
-- `paths.adrs` → ADR location (default: `docs/architecture/architecture-decision-records/`)
+- `paths.adrs` → ADR location (default: `docs/architecture/adrs/`)
 - `paths.architecture_docs` → Architecture docs (default: `docs/architecture/`)
 
 ## T1: Product Manager — BRD

@@ -107,7 +107,7 @@ If `Claude-Production-Grade-Suite/.orchestrator/codebase-context.md` exists and 
 | Category | Inputs | Behavior if Missing |
 |----------|--------|-------------------|
 | Critical | `api/openapi/*.yaml` or `api/grpc/*.proto`, `schemas/erd.md`, `docs/architecture/tech-stack.md` | STOP — cannot implement without API contracts, data models, and tech stack |
-| Degraded | `docs/architecture/architecture-decision-records/`, `schemas/migrations/*.sql` | WARN — proceed with reasonable defaults, flag assumptions |
+| Degraded | `docs/architecture/adrs/`, `schemas/migrations/*.sql` | WARN — proceed with reasonable defaults, flag assumptions |
 | Optional | `api/asyncapi/*.yaml`, existing `services/` scaffold | Continue — generate from scratch if absent |
 
 ## Pipeline Position

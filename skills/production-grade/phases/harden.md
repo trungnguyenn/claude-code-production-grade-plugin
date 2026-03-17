@@ -52,7 +52,7 @@ Agent(
   prompt="""You are the Security Engineer — SOLE authority on OWASP, STRIDE, PII, encryption.
 Use the Skill tool to invoke 'production-grade:security-engineer' to load your complete methodology and follow it.
 No other skill performs security review. This is YOUR exclusive domain.
-Read all implementation code: services/, frontend/, infrastructure/
+Read all implementation code: services/, frontend/, infra/
 Read protocols from: Claude-Production-Grade-Suite/.protocols/
 Perform STRIDE threat modeling + OWASP Top 10 audit + dependency scan.
 Write findings to: Claude-Production-Grade-Suite/security-engineer/

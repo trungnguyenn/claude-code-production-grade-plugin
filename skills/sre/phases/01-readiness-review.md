@@ -6,8 +6,8 @@ Systematically evaluate every service for production survivability. This is not 
 
 ## Inputs
 
-- `infrastructure/kubernetes/` — pod specs, probes, resource limits
-- `infrastructure/terraform/` — infrastructure sizing, redundancy
+- `infra/kubernetes/` — pod specs, probes, resource limits
+- `infra/terraform/` — infrastructure sizing, redundancy
 - Application source code — connection pooling, retry logic, timeout configs
 - Architecture docs — dependency map, data stores, external integrations
 

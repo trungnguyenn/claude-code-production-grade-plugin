@@ -395,7 +395,7 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
    ```python
    Glob("package.json"), Glob("go.mod"), Glob("pyproject.toml"), Glob("Cargo.toml"), Glob("pom.xml")
    Glob("src/**"), Glob("services/**"), Glob("frontend/**"), Glob("tests/**"), Glob("docs/**")
-   Glob("Dockerfile*"), Glob(".github/workflows/*"), Glob("infrastructure/**"), Glob("terraform/**")
+   Glob("Dockerfile*"), Glob(".github/workflows/*"), Glob("infra/**"), Glob("terraform/**")
    Glob(".production-grade.yaml")
    ```
 
@@ -959,7 +959,7 @@ When HARDEN skills find Critical/High issues:
 | T5: QA | `services/`, `frontend/`, `api/` | `tests/` | `qa-engineer/` |
 | T6a: Security | All implementation code | — | `security-engineer/` |
 | T6b: Review | All implementation + architecture | — | `code-reviewer/` |
-| T7: DevOps IaC | Architecture, implementation | `infrastructure/`, `.github/workflows/` | `devops/` |
+| T7: DevOps IaC | Architecture, implementation | `infra/`, `.github/workflows/` | `devops/` |
 | T8: Remediation | HARDEN findings | Fixes in `services/`, `frontend/` | — |
 | T9: SRE | All prior outputs | `docs/runbooks/` | `sre/` |
 | T10: Data Sci | Implementation (LLM usage) | — | `data-scientist/` |
@@ -1091,7 +1091,7 @@ At every phase transition, re-read key workspace artifacts FROM DISK before crea
 | **DEFINE → BUILD** | `product-manager/BRD/brd.md`, `solution-architect/system-design.md`, `docs/architecture/adr/*.md` (list), `api/openapi/*.yaml` (list), `.orchestrator/settings.md`, `.orchestrator/receipts/T1-*.json`, `.orchestrator/receipts/T2-*.json` |
 | **BUILD → HARDEN** | All DEFINE artifacts above + directory listing of `services/`, `frontend/`, `libs/shared/`, `.orchestrator/receipts/T3*.json`, `.orchestrator/receipts/T4*.json` |
 | **HARDEN → SHIP** | `security-engineer/findings/critical.md`, `security-engineer/findings/high.md`, `code-reviewer/findings/critical.md`, `code-reviewer/findings/high.md`, `qa-engineer/` test results, `.orchestrator/receipts/T5*.json`, `.orchestrator/receipts/T6*.json` |
-| **SHIP → SUSTAIN** | `infrastructure/` listing, `.github/workflows/` listing, `.orchestrator/receipts/T7*.json` through `.orchestrator/receipts/T10*.json` |
+| **SHIP → SUSTAIN** | `infra/` listing, `.github/workflows/` listing, `.orchestrator/receipts/T7*.json` through `.orchestrator/receipts/T10*.json` |
 
 **How:** Use `Glob` to list files, `Read` to load content. If a file doesn't exist, skip it — don't error. Then create agent task prompts using the freshly-read data, not compressed memory.
 

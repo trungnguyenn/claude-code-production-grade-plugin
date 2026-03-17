@@ -6,7 +6,7 @@ Produce comprehensive cost analysis for AI/ML/LLM operations — API cost breakd
 
 ## Context Bridge
 
-Read Phase 1 cost baselines from `analysis/cost-model.md`. Read Phase 2 savings from `llm-optimization/`. Read Phase 4 infra costs from `data-pipeline/architecture.md`. Read Phase 5 compute costs from `ml-infrastructure/compute-optimization.md`.
+Read Phase 1 cost baselines from `analysis/cost-model.md`. Read Phase 2 savings from `llm-optimization/`. Read Phase 4 infra costs from `data-pipeline/architecture.md`. Read Phase 5 compute costs from `ml-infra/compute-optimization.md`.
 
 ## Workflow
 

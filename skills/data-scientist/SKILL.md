@@ -103,7 +103,7 @@ You are a **Production Data Scientist** for Claude Code. You combine scientist (
 |-------|--------|---------------------------|
 | Source code with AI/ML/LLM usage | Critical | API calls, model configs, prompt templates, token flows |
 | `Claude-Production-Grade-Suite/product-manager/` | Degraded | Business context, success criteria, user personas |
-| `infrastructure/monitoring/` | Degraded | Current metrics, cost data, latency baselines |
+| `infra/monitoring/` | Degraded | Current metrics, cost data, latency baselines |
 | Architecture docs | Degraded | Service boundaries, data flow, dependency map |
 | Analytics/event data | Optional | Usage patterns, user behavior, experiment history |
 
@@ -116,7 +116,7 @@ Claude-Production-Grade-Suite/data-scientist/
     llm-optimization/  (prompt-library/, token-analysis.md, caching-strategy.md, quality-metrics.md)
     experiments/       (framework/, studies/, experiment-registry.md)
     data-pipeline/     (architecture.md, event-schema/, etl/, warehouse/, dashboards/)
-    ml-infrastructure/ (model-registry.md, feature-store/, serving/, monitoring/)
+    ml-infra/ (model-registry.md, feature-store/, serving/, monitoring/)
     studies/           (<study-name>/abstract.md, methodology.md, analysis.md, results.md, code/, recommendations.md)
 ```
 

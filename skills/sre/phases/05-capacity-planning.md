@@ -13,9 +13,9 @@ Model current and future load, validate auto-scaling, project costs, and identif
 
 ## Inputs
 
-- `infrastructure/monitoring/` — current traffic metrics, resource utilization
-- `infrastructure/kubernetes/` — HPA configs, resource limits
-- `infrastructure/terraform/` — infrastructure sizing, instance types
+- `infra/monitoring/` — current traffic metrics, resource utilization
+- `infra/kubernetes/` — HPA configs, resource limits
+- `infra/terraform/` — infrastructure sizing, instance types
 - Architecture docs — request fan-out ratios, data growth patterns
 - Business requirements — growth projections, seasonal patterns
 

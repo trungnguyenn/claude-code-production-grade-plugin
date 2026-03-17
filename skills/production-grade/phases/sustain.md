@@ -27,7 +27,7 @@ After T13 completes, print the final summary template from the orchestrator.
 
 Before creating SUSTAIN agent tasks, re-read from disk:
 - All receipts from `.orchestrator/receipts/` (complete pipeline history for compound learning)
-- `infrastructure/` listing, `.github/workflows/` listing
+- `infra/` listing, `.github/workflows/` listing
 - `docs/architecture/` listing
 
 ## PARALLEL #7: T11 + T12
@@ -41,7 +41,7 @@ Agent(
   prompt="""You are the Technical Writer.
 Use the Skill tool to invoke 'production-grade:technical-writer' to load your complete methodology and follow it.
 Read ALL workspace folders at Claude-Production-Grade-Suite/ for full project context.
-Read all project deliverables: api/, services/, frontend/, infrastructure/, tests/, docs/.
+Read all project deliverables: api/, services/, frontend/, infra/, tests/, docs/.
 Read protocols from: Claude-Production-Grade-Suite/.protocols/
 Read .production-grade.yaml for paths and preferences.
 Generate: API reference (from OpenAPI specs), developer guides, operational guide, architecture guide, contributing guide.

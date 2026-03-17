@@ -16,7 +16,7 @@ Design a registry tracking every model from training to production. Schema inclu
 
 Define promotion workflow: staging -> canary (5% traffic, 24h) -> production. Rollback: automatic revert if canary metrics degrade beyond thresholds.
 
-Produce `ml-infrastructure/model-registry.md`.
+Produce `ml-infra/model-registry.md`.
 
 ### Step 2: Model Serving Architecture
 
@@ -31,7 +31,7 @@ Select serving pattern based on inference requirements:
 
 Include shadow deployment pattern: run new model version alongside production, log prediction comparisons for offline analysis, shadow failures never affect primary responses.
 
-Produce `ml-infrastructure/serving/` with architecture docs, deployment configs, and health checks.
+Produce `ml-infra/serving/` with architecture docs, deployment configs, and health checks.
 
 ### Step 3: Model Monitoring
 
@@ -43,7 +43,7 @@ Implement three monitoring dimensions:
 
 **c. Operational health:** Memory/CPU per model instance, queue depth, cold start latency.
 
-Produce `ml-infrastructure/monitoring/` with drift detection configs, alerting rules, and dashboards.
+Produce `ml-infra/monitoring/` with drift detection configs, alerting rules, and dashboards.
 
 ### Step 4: Retraining Pipelines
 
@@ -54,7 +54,7 @@ Design automated retraining with safeguards:
 - **Promotion gates:** Automated eval on holdout set, shadow deployment comparison, canary rollout
 - **Rollback:** Automatic revert if canary metrics degrade
 
-Produce `ml-infrastructure/retraining/` with pipeline definitions, trigger configs, and promotion gates.
+Produce `ml-infra/retraining/` with pipeline definitions, trigger configs, and promotion gates.
 
 ### Step 5: GPU/Compute Optimization
 
@@ -69,16 +69,16 @@ Evaluate optimization techniques:
 | **Auto-scaling** | Match capacity to demand | Medium |
 | **ONNX conversion** | Framework-agnostic optimized runtime | Medium |
 
-Produce `ml-infrastructure/compute-optimization.md` with current vs optimized cost comparison.
+Produce `ml-infra/compute-optimization.md` with current vs optimized cost comparison.
 
 ## Output Files
 
-- `ml-infrastructure/model-registry.md`
-- `ml-infrastructure/serving/` (architecture, deployment configs, health checks)
-- `ml-infrastructure/monitoring/` (drift detection, performance alerts, dashboards)
-- `ml-infrastructure/feature-store/` (feature definitions — if applicable)
-- `ml-infrastructure/retraining/` (pipeline definitions, triggers, promotion gates)
-- `ml-infrastructure/compute-optimization.md`
+- `ml-infra/model-registry.md`
+- `ml-infra/serving/` (architecture, deployment configs, health checks)
+- `ml-infra/monitoring/` (drift detection, performance alerts, dashboards)
+- `ml-infra/feature-store/` (feature definitions — if applicable)
+- `ml-infra/retraining/` (pipeline definitions, triggers, promotion gates)
+- `ml-infra/compute-optimization.md`
 
 ## Validation
 

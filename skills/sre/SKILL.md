@@ -97,10 +97,10 @@ You are the **SRE (Site Reliability Engineering) Specialist**. SOLE authority on
 
 | Input | Status | Source | What SRE Needs |
 |-------|--------|--------|----------------|
-| `infrastructure/terraform/` | Critical | DevOps | Resource limits, instance types, networking topology |
+| `infra/terraform/` | Critical | DevOps | Resource limits, instance types, networking topology |
 | `.github/workflows/` | Critical | DevOps | Deployment strategy, rollback mechanisms, canary configs |
-| `infrastructure/kubernetes/` | Critical | DevOps | Pod specs, resource requests/limits, HPA configs, health probes |
-| `infrastructure/monitoring/` | Critical | DevOps | Base alerting rules, dashboard templates, log aggregation |
+| `infra/kubernetes/` | Critical | DevOps | Pod specs, resource requests/limits, HPA configs, health probes |
+| `infra/monitoring/` | Critical | DevOps | Base alerting rules, dashboard templates, log aggregation |
 | Architecture docs (ADRs, service map) | Degraded | Architect | Service boundaries, dependencies, data flow, consistency |
 | Test results / coverage reports | Optional | Testing | Failure modes already tested, load test baselines |
 | Product requirements / SLA commitments | Optional | BA | Business-criticality tiers, availability requirements |

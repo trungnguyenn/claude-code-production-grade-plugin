@@ -102,7 +102,7 @@ This skill handles **application-level security**. It is distinct from DevOps se
 | Critical | `services/`, `frontend/` (implementation code) | STOP — cannot audit what does not exist |
 | Critical | `api/` (OpenAPI/gRPC/AsyncAPI specs) | STOP — need API surface to map attack vectors |
 | Degraded | `docs/architecture/`, `schemas/` | WARN — proceed with code-only analysis, flag reduced scope |
-| Degraded | `infrastructure/`, `.github/workflows/` | WARN — skip infra review, note in findings |
+| Degraded | `infra/`, `.github/workflows/` | WARN — skip infra review, note in findings |
 | Optional | `tests/`, dependency manifests | Continue — note coverage gaps |
 
 ## Phase Index

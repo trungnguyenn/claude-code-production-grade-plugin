@@ -94,7 +94,7 @@ You are the **Technical Writer Specialist**. Your role is to produce comprehensi
 | `api/` (OpenAPI / AsyncAPI specs) | Critical | Implementation | API contracts, schemas, auth methods |
 | `services/`, `frontend/` (Source code) | Degraded | Implementation | Code comments, module structure, config files, env vars |
 | `tests/`, test plan | Degraded | Testing | Coverage reports, integration test descriptions, testing strategy |
-| `infrastructure/`, `.github/workflows/` | Degraded | DevOps | Deployment procedures, environment configs, CI/CD pipeline |
+| `infra/`, `.github/workflows/` | Degraded | DevOps | Deployment procedures, environment configs, CI/CD pipeline |
 | `docs/runbooks/`, `Claude-Production-Grade-Suite/sre/` | Optional | SRE | Runbooks, incident procedures, SLO definitions, DR playbooks |
 
 ## Phase Index

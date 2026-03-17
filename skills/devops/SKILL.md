@@ -82,15 +82,15 @@ If `Claude-Production-Grade-Suite/.orchestrator/codebase-context.md` exists and 
 
 ## Overview
 
-Full DevOps pipeline generator: from infrastructure design to production-ready deployment with monitoring and security. Generates infrastructure and deployment artifacts at the project root (`infrastructure/`, `.github/workflows/`, Dockerfiles) with planning notes in `Claude-Production-Grade-Suite/devops/`.
+Full DevOps pipeline generator: from infrastructure design to production-ready deployment with monitoring and security. Generates infrastructure and deployment artifacts at the project root (`infra/`, `.github/workflows/`, Dockerfiles) with planning notes in `Claude-Production-Grade-Suite/devops/`.
 
 ## Config Paths
 
 Read `.production-grade.yaml` at startup. Use these overrides if defined:
-- `paths.terraform` — default: `infrastructure/terraform/`
-- `paths.kubernetes` — default: `infrastructure/kubernetes/`
+- `paths.terraform` — default: `infra/terraform/`
+- `paths.kubernetes` — default: `infra/kubernetes/`
 - `paths.ci_cd` — default: `.github/workflows/`
-- `paths.monitoring` — default: `infrastructure/monitoring/`
+- `paths.monitoring` — default: `infra/monitoring/`
 
 ## When to Use
 
@@ -108,15 +108,15 @@ After Phase 1 (Assessment), Phases 2-4 and Phases 5-6 can run as two parallel gr
 
 **Group 1 (infrastructure artifacts — independent):**
 ```python
-Agent(prompt="Generate Terraform IaC following Phase 2. Write to infrastructure/terraform/.", ...)
+Agent(prompt="Generate Terraform IaC following Phase 2. Write to infra/terraform/.", ...)
 Agent(prompt="Generate CI/CD pipelines following Phase 3. Write to .github/workflows/ and scripts/.", ...)
 Agent(prompt="Generate container orchestration following Phase 4. Write Dockerfiles and K8s manifests.", ...)
 ```
 
 **Group 2 (after Group 1 — needs infrastructure context):**
 ```python
-Agent(prompt="Generate monitoring + observability following Phase 5. Write to infrastructure/monitoring/.", ...)
-Agent(prompt="Generate security infrastructure following Phase 6. Write to infrastructure/security/.", ...)
+Agent(prompt="Generate monitoring + observability following Phase 5. Write to infra/monitoring/.", ...)
+Agent(prompt="Generate security infrastructure following Phase 6. Write to infra/security/.", ...)
 ```
 
 **Execution order:**
@@ -166,7 +166,7 @@ digraph devops {
 
 ## Phase 2: Infrastructure as Code (Terraform)
 
-Generate `infrastructure/terraform/` (or `paths.terraform` from config):
+Generate `infra/terraform/` (or `paths.terraform` from config):
 
 ### Module Structure
 ```
@@ -267,7 +267,7 @@ Generate configs for the selected strategy:
 
 ## Phase 4: Container Orchestration
 
-Generate container artifacts at project root and `infrastructure/`:
+Generate container artifacts at project root and `infra/`:
 
 ### Docker
 ```
@@ -289,10 +289,10 @@ Dockerfile standards:
 - `.dockerignore` excluding `.git`, `node_modules`, `__pycache__`, etc.
 
 ### Kubernetes
-Generate Kubernetes manifests at `infrastructure/kubernetes/` (or `paths.kubernetes` from config):
+Generate Kubernetes manifests at `infra/kubernetes/` (or `paths.kubernetes` from config):
 
 ```
-infrastructure/kubernetes/
+infra/kubernetes/
 ├── base/
 │   ├── namespace.yaml
 │   ├── deployment.yaml
@@ -307,7 +307,7 @@ infrastructure/kubernetes/
 │   └── prod/
 └── kustomization.yaml
 
-infrastructure/helm/                       # (if requested)
+infra/helm/                       # (if requested)
 └── <service>/
     ├── Chart.yaml
     ├── values.yaml
@@ -327,7 +327,7 @@ K8s standards:
 
 ## Phase 5: Monitoring & Observability
 
-Generate `infrastructure/monitoring/` (or `paths.monitoring` from config):
+Generate `infra/monitoring/` (or `paths.monitoring` from config):
 
 ```
 monitoring/
@@ -376,7 +376,7 @@ monitoring/
 
 ## Phase 6: Security
 
-Generate `infrastructure/security/`:
+Generate `infra/security/`:
 
 ```
 security/
@@ -425,7 +425,7 @@ security/
 ### Project Root Output (Deliverables)
 
 ```
-infrastructure/
+infra/
 ├── terraform/
 │   ├── modules/
 │   │   ├── networking/

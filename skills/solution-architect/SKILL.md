@@ -97,7 +97,7 @@ Generates architecture deliverables at the project root (`api/`, `schemas/`, `do
 
 Read `.production-grade.yaml` at startup. Use these overrides if defined:
 - `paths.api_contracts` — default: `api/`
-- `paths.adrs` — default: `docs/architecture/architecture-decision-records/`
+- `paths.adrs` — default: `docs/architecture/adrs/`
 - `paths.architecture_docs` — default: `docs/architecture/`
 - `paths.erd` — default: `schemas/erd.md`
 - `paths.migrations` — default: `schemas/migrations/`
@@ -416,7 +416,7 @@ Each alternative includes a trade-off summary: build time, operational complexit
 
 Generate architecture documents in `docs/architecture/` (or `paths.architecture_docs` from config):
 
-### architecture-decision-records/
+### adrs/
 One ADR per major decision using this template:
 ```markdown
 # ADR-NNN: [Title]
@@ -538,7 +538,7 @@ Each service includes:
 
 ```
 docs/architecture/
-│   ├── architecture-decision-records/
+│   ├── adrs/
 │   │   ├── ADR-001-architecture-pattern.md
 │   │   └── ...
 │   ├── system-diagrams/
